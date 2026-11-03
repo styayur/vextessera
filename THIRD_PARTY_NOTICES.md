@@ -8,7 +8,7 @@ in `LICENSE`, and the corresponding source is available in this repository/tag.
 
 - React, CodeMirror 6, @uiw/react-codemirror, Zustand, Lucide and fflate: MIT
   (individual package notices are included in `licenses/`).
-- JSXGraph 1.13.3: LGPL-3.0-or-later OR MIT; this application uses the MIT option.
+- JSXGraph 1.14.1: LGPL-3.0-or-later OR MIT; this application uses the MIT option.
   Its executable expression parsers are excluded from the production bundle.
 - KaTeX: MIT, with its font and bundled component notices retained.
 - Tauri and the Rust dependency graph: see the actual package license expressions
