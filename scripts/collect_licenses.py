@@ -34,7 +34,7 @@ for name,info in sorted(lock["packages"].items()):
     pkg=json.loads((folder/"package.json").read_text())
     declared=pkg.get("license") or " AND ".join(p.get("type","UNDECLARED") for p in pkg.get("licenses",[]) if isinstance(p,dict)) or "UNDECLARED"
     npm.append({"name":pkg["name"],"version":pkg["version"],"license":declared,"source":info.get("resolved"),"integrity":info.get("integrity"),"texts":collect(folder,f"npm {pkg['name']} {pkg['version']}")})
-(dest/"npm-inventory.json").write_text(json.dumps(npm,indent=2),encoding="utf-8")
+(dest/"npm-inventory.json").write_text(json.dumps(npm,indent=2),encoding="utf-8",newline="\n")
 
 data=json.loads(subprocess.check_output(["cargo","metadata","--locked","--format-version","1","--manifest-path",str(root/"src-tauri/Cargo.toml")],cwd=root,text=True))
 rust=[]
@@ -42,7 +42,7 @@ for pkg in sorted(data["packages"],key=lambda p:(p["name"],p["version"])):
     if pkg["name"] in ("panostem","vextessera"):continue
     folder=Path(pkg["manifest_path"]).parent
     rust.append({"name":pkg["name"],"version":pkg["version"],"license":pkg.get("license") or "UNDECLARED","source":pkg.get("source"),"texts":collect(folder,f"Rust {pkg['name']} {pkg['version']}")})
-(dest/"rust-build-inventory.json").write_text(json.dumps(rust,indent=2),encoding="utf-8")
+(dest/"rust-build-inventory.json").write_text(json.dumps(rust,indent=2),encoding="utf-8",newline="\n")
 if args.runtime_python:
     probe="""import importlib.metadata as m,json
 out=[]
@@ -59,7 +59,7 @@ print(json.dumps(sorted(out,key=lambda x:x['name'].lower())))
     for pkg in python:
         for entry in pkg["texts"]:texts.append(f"\n{'='*72}\nPython {pkg['name']} {pkg['version']} — {entry['name']}\n{'='*72}\n{entry['text']}\n")
         pkg["texts"]=[entry["name"] for entry in pkg["texts"]]
-    (dest/"python-runtime-inventory.json").write_text(json.dumps(python,indent=2),encoding="utf-8")
+    (dest/"python-runtime-inventory.json").write_text(json.dumps(python,indent=2),encoding="utf-8",newline="\n")
 notice_file=dest/"THIRD_PARTY_LICENSE_TEXTS.txt"
 if args.preserve_base_notices and notice_file.exists():
     existing=notice_file.read_text(encoding="utf-8")
