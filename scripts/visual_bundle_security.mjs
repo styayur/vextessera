@@ -95,7 +95,7 @@ export async function checkVisualBundle(root = "dist") {
   const boundary = JSON.parse(
     await readFile(`${root}/visualization-boundary.json`, "utf8"),
   );
-  assert.equal(boundary.jsxgraphVersion, "1.14.1");
+  assert.equal(boundary.jsxgraphVersion, "1.14.2");
   assert.equal(boundary.executableParserModules, 0);
   assert.ok(boundary.numericModules > 0);
   process.stdout.write(

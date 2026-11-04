@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { mkdir, readFile } from "node:fs/promises";
 import { chromium } from "playwright";
-import { visualLearningRegression } from "./visual_learning_regression.mjs";
+import { visualLearningRegression, hiddenBoardRegression } from "./visual_learning_regression.mjs";
 import { workbenchRegression } from "./workbench_regression.mjs";
 
 const base = process.env.SVE_BASE || "http://127.0.0.1:1421/";
@@ -326,6 +326,7 @@ try {
   ok("desktop toolbar: complete long-text translation, restore and cancellation");
   assert.deepEqual(errors, []);
   await visualLearningRegression(browser, base);
+  await hiddenBoardRegression(browser, base);
   await workbenchRegression(browser,base);
   await studioRegression(browser,base);
   await previewSecurityRegression(browser,base);

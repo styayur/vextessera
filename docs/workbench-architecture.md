@@ -127,7 +127,7 @@ lazy; Overview and Resources load neither. `definitions.ts` is an eager
 compatibility barrel for offline schema/math tests only. Production never
 imports it. Shared reducer/math/scenes/renderer remain reusable.
 
-JSXGraph is pinned to **1.14.1** after the [source review](audits/jsxgraph-1.14.1-review.md). Vite substitutes fail-closed JessieCode and
+JSXGraph is pinned to **1.14.2** after the [source review](audits/jsxgraph-1.14.2-review.md). Vite substitutes fail-closed JessieCode and
 Geonext interfaces and removes the obsolete Function ES6 probe with an
 exact-source guard. Numeric callbacks and SVG primitives are reviewed source;
 no generated JavaScript or dependency source vendoring is involved.
