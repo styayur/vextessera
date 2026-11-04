@@ -5,6 +5,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::args().any(|arg| arg == "--verify-build") {
         use sha2::{Digest, Sha256};
         use std::io::Write;
+
+        fn sha256_hex(bytes: &[u8]) -> String {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|byte| format!("{byte:02x}"))
+                .collect()
+        }
         #[cfg(feature = "tauri")]
         let (bundle_identifier, product, app_version) = {
             let context: tauri::Context<tauri::Wry> = tauri::generate_context!();
@@ -94,7 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ];
         let template_hashes: std::collections::BTreeMap<_, _> = templates
             .iter()
-            .map(|(name, bytes)| (*name, format!("{:x}", Sha256::digest(bytes))))
+            .map(|(name, bytes)| (*name, sha256_hex(bytes)))
             .collect();
         let info = serde_json::json!({
             "product": product,
@@ -102,10 +109,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             "app_version": app_version,
             "bundle_identifier": bundle_identifier,
             "runtime_commit": "f427fc67df75513be0cd3f3329e327a9a19401c3",
-            "requirements_sha256": format!("{:x}", Sha256::digest(include_bytes!("../runtime/requirements.lock"))),
-            "controller_sha256": format!("{:x}", Sha256::digest(include_bytes!("../runtime/controller.py"))),
-            "knowledge_catalog_sha256": format!("{:x}", Sha256::digest(include_bytes!("../runtime/examples/knowledge_catalog.json"))),
-            "knowledge_helpers_sha256": format!("{:x}", Sha256::digest(include_bytes!("../runtime/examples/knowledge_helpers.py"))),
+            "requirements_sha256": sha256_hex(include_bytes!("../runtime/requirements.lock")),
+            "controller_sha256": sha256_hex(include_bytes!("../runtime/controller.py")),
+            "knowledge_catalog_sha256": sha256_hex(include_bytes!("../runtime/examples/knowledge_catalog.json")),
+            "knowledge_helpers_sha256": sha256_hex(include_bytes!("../runtime/examples/knowledge_helpers.py")),
             "knowledge_template_hashes": template_hashes,
         });
         writeln!(std::io::stdout(), "{info}")?;

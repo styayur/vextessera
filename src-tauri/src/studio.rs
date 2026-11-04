@@ -17,8 +17,15 @@ const UV_SHA: &str = "a38b8d1902b7cfbc76b423ba1bb456f623f42064cdc72628b6075b89af
 const PYTHON: &str = "3.11.14";
 static NEXT: AtomicU64 = AtomicU64::new(1);
 
+fn sha256_hex(bytes: &[u8]) -> String {
+    Sha256::digest(bytes)
+        .iter()
+        .map(|byte| format!("{byte:02x}"))
+        .collect()
+}
+
 fn verified_uv_executable(bytes: &[u8], expected_sha: &str) -> Result<Vec<u8>, String> {
-    if format!("{:x}", Sha256::digest(bytes)) != expected_sha {
+    if sha256_hex(bytes) != expected_sha {
         return Err("uv SHA-256 mismatch; installation stopped".into());
     }
     let mut archive =
@@ -780,7 +787,7 @@ mod tests {
         archive.start_file("uv.exe", options)?;
         archive.write_all(b"MZown synthetic executable fixture")?;
         let bytes = archive.finish()?.into_inner();
-        let digest = format!("{:x}", Sha256::digest(&bytes));
+        let digest = sha256_hex(&bytes);
         assert_eq!(
             verified_uv_executable(&bytes, &digest)?,
             b"MZown synthetic executable fixture"
@@ -790,9 +797,7 @@ mod tests {
             "an untrusted archive must fail before parsing"
         );
         let truncated = &bytes[..bytes.len() / 2];
-        assert!(
-            verified_uv_executable(truncated, &format!("{:x}", Sha256::digest(truncated))).is_err()
-        );
+        assert!(verified_uv_executable(truncated, &sha256_hex(truncated)).is_err());
         Ok(())
     }
 
@@ -803,7 +808,7 @@ mod tests {
         let bytes = std::fs::read(std::env::var("VEXT_REVIEWED_UV_ARCHIVE")?)?;
         let executable = verified_uv_executable(&bytes, UV_SHA)?;
         assert_eq!(
-            format!("{:x}", Sha256::digest(&executable)),
+            sha256_hex(&executable),
             std::env::var("VEXT_REVIEWED_UV_EXE_SHA256")?
         );
         Ok(())
