@@ -348,3 +348,37 @@ export async function visualLearningRegression(browser, base) {
     await context.close();
   }
 }
+
+export async function hiddenBoardRegression(browser, base) {
+  const page = await browser.newPage();
+  try {
+    await page.goto(base);
+    const recoveredBounds = await page.evaluate(async () => {
+      const { default: JXG } = await import('/src/visualizations/renderers/numericCore.ts');
+      const host = document.createElement('div');
+      host.id = 'own-hidden-board-regression';
+      host.style.cssText = 'display:none;width:400px;height:300px';
+      document.body.append(host);
+      let board;
+      try {
+        board = JXG.JSXGraph.initBoard(host.id, { boundingbox: [-5, 5, 5, -5], axis: false, renderer: 'svg', showNavigation: false, showCopyright: false });
+        board.setBoundingBox([-2, 2, 2, -2], false);
+        host.style.display = 'block';
+        board.resizeContainer(400, 300);
+        board.updateContainerDims(400, 300);
+        board.update();
+        const point = board.create('point', [1, 1], { name: '', withLabel: false });
+        return { bounds: board.getBoundingBox(), point: point.coords.scrCoords, svg: host.querySelectorAll('svg').length };
+      } finally {
+        if (board) JXG.JSXGraph.freeBoard(board);
+        host.remove();
+      }
+    });
+    assert.equal(recoveredBounds.svg, 1);
+    recoveredBounds.bounds.forEach((value, index) => assert.ok(Number.isFinite(value) && Math.abs(value - [-2, 2, 2, -2][index]) < 1e-6, 'hidden board must preserve the requested bounds after reveal'));
+    assert.ok(recoveredBounds.point.every(Number.isFinite));
+    process.stdout.write('VISUAL: hidden numeric board reveal preserves requested bounds and finite SVG coordinates PASS\n');
+  } finally {
+    await page.close();
+  }
+}

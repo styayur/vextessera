@@ -688,7 +688,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 ========================================================================
-npm jsxgraph 1.14.1 — LICENSE.LGPL
+npm jsxgraph 1.14.2 — LICENSE.LGPL
 ========================================================================
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -858,7 +858,7 @@ Library.
 
 
 ========================================================================
-npm jsxgraph 1.14.1 — LICENSE.MIT
+npm jsxgraph 1.14.2 — LICENSE.MIT
 ========================================================================
 Copyright (C) 2008-2012
 
@@ -941,7 +941,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 ========================================================================
-npm lucide-react 1.61.0 — LICENSE
+npm lucide-react 1.66.0 — LICENSE
 ========================================================================
 ISC License
 

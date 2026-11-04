@@ -78,7 +78,7 @@ export default defineConfig(({ mode }) => ({
             "utf8",
           ),
         ).version;
-        if (version !== "1.14.1")
+        if (version !== "1.14.2")
           throw new Error("JSXGraph upgrades require explicit security review");
         this.emitFile({
           type: "asset",
