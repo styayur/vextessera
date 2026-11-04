@@ -17,6 +17,30 @@ const UV_SHA: &str = "a38b8d1902b7cfbc76b423ba1bb456f623f42064cdc72628b6075b89af
 const PYTHON: &str = "3.11.14";
 static NEXT: AtomicU64 = AtomicU64::new(1);
 
+fn verified_uv_executable(bytes: &[u8], expected_sha: &str) -> Result<Vec<u8>, String> {
+    if format!("{:x}", Sha256::digest(bytes)) != expected_sha {
+        return Err("uv SHA-256 mismatch; installation stopped".into());
+    }
+    let mut archive =
+        zip::ZipArchive::new(std::io::Cursor::new(bytes)).map_err(|error| error.to_string())?;
+    let mut exe = archive
+        .by_name("uv.exe")
+        .map_err(|error| error.to_string())?;
+    const MAX_EXE: u64 = 128 * 1024 * 1024;
+    if exe.is_dir() || exe.is_symlink() || exe.size() > MAX_EXE {
+        return Err("uv executable entry is not a bounded regular file".into());
+    }
+    let mut result = Vec::new();
+    exe.by_ref()
+        .take(MAX_EXE + 1)
+        .read_to_end(&mut result)
+        .map_err(|error| error.to_string())?;
+    if result.len() as u64 > MAX_EXE || !result.starts_with(b"MZ") {
+        return Err("uv executable entry is oversized or lacks a Windows MZ header".into());
+    }
+    Ok(result)
+}
+
 /// Recover owned task state after a worker panic so cancellation stays available.
 pub fn state_lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
     match mutex.lock() {
@@ -539,14 +563,9 @@ impl Studio {
                 .join()
                 .map_err(|_| "Runtime download thread failed".to_string())?
             })?;
-            if format!("{:x}", Sha256::digest(&bytes)) != UV_SHA {
-                return Err("uv SHA-256 mismatch; installation stopped".into());
-            }
-            let mut archive =
-                zip::ZipArchive::new(std::io::Cursor::new(bytes)).map_err(|e| e.to_string())?;
-            let mut exe = archive.by_name("uv.exe").map_err(|e| e.to_string())?;
+            let executable = verified_uv_executable(&bytes, UV_SHA)?;
             let mut out = std::fs::File::create(&uv).map_err(|e| e.to_string())?;
-            std::io::copy(&mut exe, &mut out).map_err(|e| e.to_string())?;
+            out.write_all(&executable).map_err(|e| e.to_string())?;
         }
         for args in [
             vec![
@@ -751,6 +770,44 @@ pub async fn studio_media(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn pinned_zip_reads_only_the_expected_executable() -> Result<(), Box<dyn std::error::Error>> {
+        let mut archive = zip::ZipWriter::new(std::io::Cursor::new(Vec::new()));
+        let options = zip::write::SimpleFileOptions::default()
+            .compression_method(zip::CompressionMethod::Deflated);
+        archive.start_file("../outside.exe", options)?;
+        archive.write_all(b"not selected")?;
+        archive.start_file("uv.exe", options)?;
+        archive.write_all(b"MZown synthetic executable fixture")?;
+        let bytes = archive.finish()?.into_inner();
+        let digest = format!("{:x}", Sha256::digest(&bytes));
+        assert_eq!(
+            verified_uv_executable(&bytes, &digest)?,
+            b"MZown synthetic executable fixture"
+        );
+        assert!(
+            verified_uv_executable(&bytes, UV_SHA).is_err(),
+            "an untrusted archive must fail before parsing"
+        );
+        let truncated = &bytes[..bytes.len() / 2];
+        assert!(
+            verified_uv_executable(truncated, &format!("{:x}", Sha256::digest(truncated))).is_err()
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[ignore = "requires an explicitly downloaded SHA-256-pinned official uv archive"]
+    fn reviewed_official_uv_archive_extracts_without_execution(
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let bytes = std::fs::read(std::env::var("VEXT_REVIEWED_UV_ARCHIVE")?)?;
+        let executable = verified_uv_executable(&bytes, UV_SHA)?;
+        assert_eq!(
+            format!("{:x}", Sha256::digest(&executable)),
+            std::env::var("VEXT_REVIEWED_UV_EXE_SHA256")?
+        );
+        Ok(())
+    }
     #[test]
     fn command_environment_drops_credentials() {
         let cmd = clean_command(std::ffi::OsStr::new("python"));
