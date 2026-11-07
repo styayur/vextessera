@@ -34,6 +34,7 @@ npm run build
 ```
 
 Authoritative CI entrypoints:
+
 - `.github/workflows/ci.yml` — CI
 - `.github/workflows/codeforge-regression.yml` — CodeForge regression
 - `.github/workflows/deploy-pages.yml` — Deploy web (GitHub Pages)
