@@ -1,2 +1,4 @@
 # Keep embedded runtime source and its recorded hashes reproducible across checkouts.
 src-tauri/runtime/** text eol=lf
+
+.github/workflows/*.lock.yml linguist-generated=true
