@@ -11,9 +11,9 @@
     "description_sources": {
       "unspecified": 903
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
-    "previous_count": 447,
-    "updated_at": "2026-10-26"
+    "baseline": "artifacts/index-before",
+    "previous_count": 903,
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "falstad",
@@ -27,25 +27,25 @@
     "description_sources": {
       "title-and-provider-category": 85
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
+    "baseline": "artifacts/index-before",
     "previous_count": 85,
-    "updated_at": "2026-10-26"
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "phet",
-    "entry_count": 122,
+    "entry_count": 127,
     "description_coverage": 1,
     "tags_coverage": 1,
-    "semantic_concept_coverage": 0.6311475409836066,
-    "subject_coverage": 0.6311475409836066,
+    "semantic_concept_coverage": 0.6456692913385826,
+    "subject_coverage": 0.6456692913385826,
     "language_coverage": 1,
     "thumbnail_coverage": 1,
     "description_sources": {
-      "unspecified": 122
+      "unspecified": 127
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
-    "previous_count": 120,
-    "updated_at": "2026-10-26"
+    "baseline": "artifacts/index-before",
+    "previous_count": 122,
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "betterexplained",
@@ -59,25 +59,25 @@
     "description_sources": {
       "title-and-provider-category": 144
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
+    "baseline": "artifacts/index-before",
     "previous_count": 144,
-    "updated_at": "2026-10-26"
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "physicsfundamentals",
-    "entry_count": 152,
+    "entry_count": 161,
     "description_coverage": 1,
     "tags_coverage": 1,
-    "semantic_concept_coverage": 0.9013157894736842,
-    "subject_coverage": 0.9013157894736842,
+    "semantic_concept_coverage": 0.8881987577639752,
+    "subject_coverage": 0.8881987577639752,
     "language_coverage": 1,
     "thumbnail_coverage": 0,
     "description_sources": {
-      "unspecified": 152
+      "unspecified": 161
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
-    "previous_count": 138,
-    "updated_at": "2026-10-26"
+    "baseline": "artifacts/index-before",
+    "previous_count": 152,
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "physicstuff",
@@ -91,9 +91,9 @@
     "description_sources": {
       "unspecified": 56
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
-    "previous_count": 52,
-    "updated_at": "2026-10-26"
+    "baseline": "artifacts/index-before",
+    "previous_count": 56,
+    "updated_at": "2026-11-09"
   },
   {
     "provider": "maotian",
@@ -107,8 +107,8 @@
     "description_sources": {
       "title-and-provider-category": 93
     },
-    "baseline": "d9870a061c9b5a89d0d0ee7a128ba95c63292d75",
+    "baseline": "artifacts/index-before",
     "previous_count": 93,
-    "updated_at": "2026-10-26"
+    "updated_at": "2026-11-09"
   }
 ]
