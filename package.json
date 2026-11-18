@@ -38,7 +38,10 @@
     "knowledge:batch": "node --experimental-strip-types scripts/knowledge/batch.mjs",
     "knowledge:ingest": "node --experimental-strip-types scripts/knowledge/ingest.mjs",
     "test:knowledge:catalog": "node --experimental-strip-types scripts/knowledge_catalog_test.mjs",
-    "test:publication": "python scripts/publication_browser_test.py"
+    "test:publication": "python scripts/publication_browser_test.py",
+    "postinstall": "node scripts/dependency-security.mjs apply",
+    "security:audit": "node scripts/dependency-security.mjs audit",
+    "security:test": "node scripts/dependency-security.mjs test"
   },
   "dependencies": {
     "@codemirror/lang-python": "6.2.1",
@@ -87,6 +90,7 @@
     },
     "@typescript-eslint/typescript-estree": {
       "minimatch": "^11.0.1"
-    }
+    },
+    "picomatch": "4.0.7"
   }
 }
