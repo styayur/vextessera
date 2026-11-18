@@ -43,14 +43,14 @@
   "current": {
     "concept_resolution_accuracy": 1,
     "cross_language_concept_parity": 1,
-    "cross_language_top10_overlap": 0.5225806451612903,
+    "cross_language_top10_overlap": 0.5268817204301075,
     "concept_recall": 1,
-    "zero_result_queries": 666,
-    "zero_result_rate": 0.4774193548387097,
+    "zero_result_queries": 660,
+    "zero_result_rate": 0.4731182795698925,
     "query_count": 1395,
     "cross_language_top10_overlap_when_available": 1,
-    "precision_at_5": 0.4666666666666667,
-    "precision_at_10": 0.33333333333333337,
+    "precision_at_5": 0.4722222222222223,
+    "precision_at_10": 0.33611111111111114,
     "false_positive_regression_count": 0
   },
   "precision": [
@@ -573,8 +573,18 @@
               "relevant": true
             },
             {
+              "title": "Electric Motor Parts Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/electric-motor-parts-simulator",
+              "relevant": false
+            },
+            {
               "title": "Equilibrium Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/equilibrium-simulator",
+              "relevant": false
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
               "relevant": false
             }
           ]
@@ -596,8 +606,18 @@
               "relevant": true
             },
             {
+              "title": "Electric Motor Parts Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/electric-motor-parts-simulator",
+              "relevant": false
+            },
+            {
               "title": "Equilibrium Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/equilibrium-simulator",
+              "relevant": false
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
               "relevant": false
             }
           ]
@@ -619,8 +639,18 @@
               "relevant": true
             },
             {
+              "title": "Electric Motor Parts Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/electric-motor-parts-simulator",
+              "relevant": false
+            },
+            {
               "title": "Equilibrium Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/equilibrium-simulator",
+              "relevant": false
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
               "relevant": false
             }
           ]
@@ -2365,11 +2395,6 @@
               "title": "Fourier Series Applet",
               "url": "https://falstad.com/fourier/",
               "relevant": true
-            },
-            {
-              "title": "Fourier Synthesis",
-              "url": "https://physicstuff.com/waves-oscillations/fourier-synthesis",
-              "relevant": false
             }
           ]
         },
@@ -2383,11 +2408,6 @@
               "title": "Fourier Series Applet",
               "url": "https://falstad.com/fourier/",
               "relevant": true
-            },
-            {
-              "title": "Fourier Synthesis",
-              "url": "https://physicstuff.com/waves-oscillations/fourier-synthesis",
-              "relevant": false
             }
           ]
         },
@@ -2401,11 +2421,6 @@
               "title": "Fourier Series Applet",
               "url": "https://falstad.com/fourier/",
               "relevant": true
-            },
-            {
-              "title": "Fourier Synthesis",
-              "url": "https://physicstuff.com/waves-oscillations/fourier-synthesis",
-              "relevant": false
             }
           ]
         }
@@ -2686,12 +2701,17 @@
         {
           "language": "en",
           "query": "moment of inertia",
-          "precision_at_5": 0.2,
-          "precision_at_10": 0.1,
+          "precision_at_5": 0.4,
+          "precision_at_10": 0.2,
           "judged_top10": [
             {
               "title": "Moment Of Inertia Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/moment-of-inertia-simulator",
+              "relevant": true
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
               "relevant": true
             }
           ]
@@ -2699,12 +2719,17 @@
         {
           "language": "zh-CN",
           "query": "转动惯量",
-          "precision_at_5": 0.2,
-          "precision_at_10": 0.1,
+          "precision_at_5": 0.4,
+          "precision_at_10": 0.2,
           "judged_top10": [
             {
               "title": "Moment Of Inertia Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/moment-of-inertia-simulator",
+              "relevant": true
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
               "relevant": true
             }
           ]
@@ -2712,19 +2737,24 @@
         {
           "language": "zh-TW",
           "query": "轉動慣量",
-          "precision_at_5": 0.2,
-          "precision_at_10": 0.1,
+          "precision_at_5": 0.4,
+          "precision_at_10": 0.2,
           "judged_top10": [
             {
               "title": "Moment Of Inertia Simulator",
               "url": "https://physicsfundamentalsinfo.com/labs/moment-of-inertia-simulator",
               "relevant": true
+            },
+            {
+              "title": "Polar Moment Of Inertia Simulator",
+              "url": "https://physicsfundamentalsinfo.com/labs/polar-moment-of-inertia-simulator",
+              "relevant": true
             }
           ]
         }
       ],
-      "precision_at_5": 0.20000000000000004,
-      "precision_at_10": 0.10000000000000002
+      "precision_at_5": 0.4000000000000001,
+      "precision_at_10": 0.20000000000000004
     },
     {
       "id": "standing-wave",
