@@ -143,7 +143,7 @@ function audit() {
   assert.ok(!result.error && [0,1].includes(result.status), 'audit unavailable; raw output retained');
   const report = JSON.parse(result.stdout);
   validateAudit(report, JSON.parse(readFileSync('package-lock.json')));
-  console.log(JSON.stringify({ status: 'VERIFIED_LOCAL_BACKPORT', rawAudit: 'artifacts/npm-audit.json', registryVulnerabilities: report.metadata.vulnerabilities, advisory: binding.advisory, installedCopies: locations().length }));
+  process.stdout.write(JSON.stringify({ status: 'VERIFIED_LOCAL_BACKPORT', rawAudit: 'artifacts/npm-audit.json', registryVulnerabilities: report.metadata.vulnerabilities, advisory: binding.advisory, installedCopies: locations().length }) + '\n');
 }
 
 const mode = process.argv[2] ?? 'verify';
@@ -178,4 +178,4 @@ if (mode === 'test') {
   } finally { rmSync(fixture, {recursive:true, force:true}); }
 }
 if (mode === 'audit') audit();
-console.log(`picomatch ${mode}: ${copies.length} integrity-bound installed copies passed exploit and compatibility checks`);
+process.stdout.write(`picomatch ${mode}: ${copies.length} integrity-bound installed copies passed exploit and compatibility checks\n`);
