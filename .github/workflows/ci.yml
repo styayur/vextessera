@@ -23,8 +23,6 @@ jobs:
       - run: npm run build
       - name: Unit tests (search + translation logic)
         run: npm test
-      - name: Dependency audit
-        run: npm audit --audit-level=moderate
       - name: Install test browser
         run: npx playwright install --with-deps chromium
       - name: Browser regression tests
@@ -46,6 +44,8 @@ jobs:
           python scripts/publication_browser_test.py --base http://127.0.0.1:1425/ --out artifacts/publication-browser
       - name: Pages build smoke test
         run: npm run test:web:build
+      - name: Dependency audit
+        run: npm audit --audit-level=moderate
 
   desktop:
     name: Windows desktop compile
