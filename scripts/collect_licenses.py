@@ -15,7 +15,7 @@ dest.mkdir(exist_ok=True)
 texts=[]
 def collect(folder,label):
     candidates=[]
-    for pattern in ("LICENSE*","LICENCE*","COPYING*","NOTICE*","license*","licence*"):
+    for pattern in ("LICENSE*","LICENCE*","COPYING*","COPYRIGHT*","NOTICE*","license*","licence*"):
         candidates.extend(folder.glob(pattern))
     found=[]
     for p in sorted(set(candidates)):
