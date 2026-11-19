@@ -5,17 +5,19 @@ use std::hint::black_box;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     ffi_conversion_contracts()?;
     slice_ownership_contract();
-    let unknown_level = std::panic::catch_unwind(|| {
-        // SAFETY: This concrete conversion checks u32 flags and rejects unknown
-        // bits by a Rust panic; it performs no FFI or pointer access.
-        unsafe { <glib::LogLevel as glib::translate::FromGlib<u32>>::from_glib(0x8000_0000) }
-    });
-    let panic = unknown_level.expect_err("unknown native log bits must still be rejected");
-    let text = panic
-        .downcast_ref::<&str>()
-        .copied()
-        .or_else(|| panic.downcast_ref::<String>().map(String::as_str));
-    assert_eq!(text, Some("Unknown log level"));
+    assert!(glib::LogLevel::try_from(0x8000_0000).is_err());
+    assert!(glib::LogLevel::try_from(0).is_err());
+    for level in [
+        glib::LogLevel::Error,
+        glib::LogLevel::Critical,
+        glib::LogLevel::Warning,
+        glib::LogLevel::Message,
+        glib::LogLevel::Info,
+        glib::LogLevel::Debug,
+    ] {
+        let flags = glib::translate::IntoGlib::into_glib(level);
+        assert_eq!(glib::LogLevel::try_from(flags), Ok(level));
+    }
     for _ in 0..1000 {
         let values = ["first", "", "中文", "last"];
         let variant = black_box(values.to_variant());

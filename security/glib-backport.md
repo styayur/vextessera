@@ -48,7 +48,11 @@ branches, optional hostname handling and ownership transfers.
 then drops the owned element. The enclosing GLib allocation stays owned by the
 slice, and the terminator is established before user destruction can unwind.
 The unknown-log-level panic also uses a constant diagnostic instead of emitting
-foreign numeric bits. No unsafe field, test or scan scope is removed.
+foreign numeric bits. Numeric validation has an additive safe `TryFrom<u32>`
+boundary; the existing native `FromGlib<u32>` delegates to it and keeps its
+priority/rejection behavior. The harness tests valid flag round trips and
+unknown/zero rejection through that safe boundary. No unsafe field or scan scope
+is removed, and the rejected-input case stays covered without an unsafe test.
 
 `glib-local-hardening.patch` and its checksum/base hashes in the provenance
 record distinguish these changes from upstream. The Linux harness also checks

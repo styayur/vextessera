@@ -87,7 +87,7 @@
     "src/gstring_builder.rs": "bfb1b131433531af2efa8765853ef35bbe02dc86120a04b55e6ec97e60cc8fac",
     "src/key_file.rs": "864aad100270c4595141a8bba18ab310f2969e9fbf6d526136aacfd84bbf3ee7",
     "src/lib.rs": "70abc92bf0d02f3c4989034501065cdf64d70901e511f6720d8cd65fcbb662e1",
-    "src/log.rs": "fb031260080fa023fa22cbae5ba4273cd620f62c47296969267a07548224313d",
+    "src/log.rs": "e44d88a100a22c7707d8dfcd892e8c57d4043f39988932b01999a49a147e3349",
     "src/main_context.rs": "a1dc45489f318659f0c4a94d3143807270e6cce6a8d127afa25944838ce66b25",
     "src/main_context_channel.rs": "e619173fc993bb1ffa350ef692b50b3b268ed5b294208caede8271ae742d80e8",
     "src/main_context_futures.rs": "49a56a433d4f57929d7ced0d438b8dcdbe05b78d097e28d27ead09821cb802be",
@@ -163,11 +163,11 @@
       "src/variant.rs": "b48295eca732e862b2c5347ee431c2f800c7b0c6b30f6a0f0879cd16fe13eb9b"
     },
     "patch": "security/glib-local-hardening.patch",
-    "patchSha256": "3abfd0d44cc5a25afc63f3d81154449bf5155f964484d9e7bcc38df3059febcf",
+    "patchSha256": "5a506e9d8fab2e86b583b168fde592e667d6ac8bb472a66ad599a9524baee652",
     "changes": [
       "All 64 matching GError conversion sites use explicit Error dispatch; GString/PathBuf/bool native conversions retain ownership/optionality and all null/error branches.",
       "PtrSlice::truncate moves T out, writes the null slot, then drops the owned T, preserving allocation and establishing terminator before user destruction.",
-      "Unknown numeric log-level panic retains a constant diagnostic without foreign numeric bits."
+      "Unknown numeric log-level panic retains a constant diagnostic; additive safe TryFrom<u32> validates the same flags and the existing native conversion delegates to it."
     ],
     "analysis": "Initial CodeQL traces conflate incompatible generic conversion types and mark post-drop slot overwrite invalid. No query suppression, excluded source or advisory ignore is added; fresh exact-head analysis is required."
   }
