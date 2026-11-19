@@ -563,7 +563,7 @@ index 94e769d..fe5081e 100644
  }
  
 diff --git a/vendor/glib/src/key_file.rs b/vendor/glib/src/key_file.rs
-index 54c9eb1..e252c00 100644
+index 54c9eb1..574b253 100644
 --- a/vendor/glib/src/key_file.rs
 +++ b/vendor/glib/src/key_file.rs
 @@ -17,7 +17,7 @@ impl KeyFile {
@@ -580,7 +580,7 @@ index 54c9eb1..e252c00 100644
              );
              if error.is_null() {
 -                let path: GString = from_glib_full(full_path);
-+                let path: GString = std::path::PathBuf::from_glib_full(full_path);
++                let path: GString = GString::from_glib_full(full_path);
                  Ok(path::PathBuf::from(&path))
              } else {
 -                Err(from_glib_full(error))
@@ -593,7 +593,7 @@ index 54c9eb1..e252c00 100644
              );
              if error.is_null() {
 -                let path: GString = from_glib_full(full_path);
-+                let path: GString = std::path::PathBuf::from_glib_full(full_path);
++                let path: GString = GString::from_glib_full(full_path);
                  Ok(path::PathBuf::from(&path))
              } else {
 -                Err(from_glib_full(error))

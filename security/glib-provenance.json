@@ -85,7 +85,7 @@
     "src/gobject/signal_group.rs": "17eb4995d8f13d37d25d3a0465ca135d69fc4e548db712c2bd80c5419d8812e6",
     "src/gstring.rs": "f3fe8d70bd1e58b070d4ed9d34cdd3e39f511f341424a632b9d8acdf2aec8741",
     "src/gstring_builder.rs": "bfb1b131433531af2efa8765853ef35bbe02dc86120a04b55e6ec97e60cc8fac",
-    "src/key_file.rs": "78f0e2830652148db81d5a6504b627074f1ff3e2119f793d2dbcb5b32950eaca",
+    "src/key_file.rs": "2ad8fa5132d6093e623ee4def8e1d68aef46372c3c4c9f9811419b44f3593e2a",
     "src/lib.rs": "70abc92bf0d02f3c4989034501065cdf64d70901e511f6720d8cd65fcbb662e1",
     "src/log.rs": "e44d88a100a22c7707d8dfcd892e8c57d4043f39988932b01999a49a147e3349",
     "src/main_context.rs": "a1dc45489f318659f0c4a94d3143807270e6cce6a8d127afa25944838ce66b25",
@@ -163,7 +163,7 @@
       "src/variant.rs": "b48295eca732e862b2c5347ee431c2f800c7b0c6b30f6a0f0879cd16fe13eb9b"
     },
     "patch": "security/glib-local-hardening.patch",
-    "patchSha256": "0317f9f426e7cf1986263b2caafb52085764ee8e06d6ca7471310d0cd5b3e107",
+    "patchSha256": "64bb40fd9608b49d541836f024319a788b0f0bf265292d339be29528432ac105",
     "changes": [
       "All 64 matching GError conversions use concrete Error dispatch. URI gchar outputs explicitly retain NULL/None vs owned GString branches; filename/charset outputs name PathBuf/GStr/Vec<GString>/bool targets. Native calls, optionality, lifetime, allocator ownership, error branches and offsets are retained.",
       "PtrSlice::truncate moves T out, writes the null slot, then drops the owned T, preserving allocation and establishing terminator before user destruction.",
