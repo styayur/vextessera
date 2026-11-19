@@ -19,12 +19,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run security:test
       - run: npm run lint
       - run: npm run build
       - name: Unit tests (search + translation logic)
         run: npm test
-      - name: Dependency audit
-        run: npm audit --audit-level=moderate
       - name: Install test browser
         run: npx playwright install --with-deps chromium
       - name: Browser regression tests
@@ -46,6 +45,14 @@ jobs:
           python scripts/publication_browser_test.py --base http://127.0.0.1:1425/ --out artifacts/publication-browser
       - name: Pages build smoke test
         run: npm run test:web:build
+      - name: Dependency audit
+        run: npm run security:audit
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: npm-security-audit
+          path: artifacts/npm-audit.json
+          if-no-files-found: error
 
   desktop:
     name: Windows desktop compile
