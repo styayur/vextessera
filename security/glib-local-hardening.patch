@@ -1,0 +1,156 @@
+diff --git a/vendor/glib/src/auto/functions.rs b/vendor/glib/src/auto/functions.rs
+index 7d569ad..8e2d296 100644
+--- a/vendor/glib/src/auto/functions.rs
++++ b/vendor/glib/src/auto/functions.rs
+@@ -205,7 +205,7 @@ pub fn file_set_contents(
+         if error.is_null() {
+             Ok(())
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -234,7 +234,7 @@ pub fn file_set_contents_full(
+         if error.is_null() {
+             Ok(())
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -277,9 +277,14 @@ pub fn filename_from_uri(
+         let mut error = ptr::null_mut();
+         let ret = ffi::g_filename_from_uri(uri.to_glib_none().0, &mut hostname, &mut error);
+         if error.is_null() {
+-            Ok((from_glib_full(ret), from_glib_full(hostname)))
++            let hostname = if hostname.is_null() {
++                None
++            } else {
++                Some(crate::GString::from_glib_full(hostname))
++            };
++            Ok((std::path::PathBuf::from_glib_full(ret), hostname))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -299,7 +304,7 @@ pub fn filename_to_uri(
+         if error.is_null() {
+             Ok(from_glib_full(ret))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -342,9 +347,9 @@ pub fn codeset() -> crate::GString {
+ pub fn console_charset() -> Option<crate::GString> {
+     unsafe {
+         let mut charset = ptr::null();
+-        let ret = from_glib(ffi::g_get_console_charset(&mut charset));
++        let ret = bool::from_glib(ffi::g_get_console_charset(&mut charset));
+         if ret {
+-            Some(from_glib_none(charset))
++            Some(crate::GString::from_glib_none(charset))
+         } else {
+             None
+         }
+@@ -666,7 +671,7 @@ pub fn shell_parse_argv(
+                 argcp.assume_init() as _,
+             ))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -690,7 +695,7 @@ pub fn shell_unquote(
+         if error.is_null() {
+             Ok(from_glib_full(ret))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -741,7 +746,7 @@ pub fn spawn_async(
+         if error.is_null() {
+             Ok(from_glib(child_pid.assume_init()))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -764,7 +769,7 @@ pub fn spawn_check_exit_status(wait_status: i32) -> Result<(), crate::Error> {
+         if error.is_null() {
+             Ok(())
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -780,7 +785,7 @@ pub fn spawn_check_wait_status(wait_status: i32) -> Result<(), crate::Error> {
+         if error.is_null() {
+             Ok(())
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -799,7 +804,7 @@ pub fn spawn_command_line_async(
+         if error.is_null() {
+             Ok(())
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -854,7 +859,7 @@ pub fn usleep(microseconds: libc::c_ulong) {
+ 
+ #[doc(alias = "g_uuid_string_is_valid")]
+ pub fn uuid_string_is_valid(str: &str) -> bool {
+-    unsafe { from_glib(ffi::g_uuid_string_is_valid(str.to_glib_none().0)) }
++    unsafe { bool::from_glib(ffi::g_uuid_string_is_valid(str.to_glib_none().0)) }
+ }
+ 
+ #[doc(alias = "g_uuid_string_random")]
+diff --git a/vendor/glib/src/collections/ptr_slice.rs b/vendor/glib/src/collections/ptr_slice.rs
+index e925d98..f462401 100644
+--- a/vendor/glib/src/collections/ptr_slice.rs
++++ b/vendor/glib/src/collections/ptr_slice.rs
+@@ -895,11 +895,14 @@ impl<T: TransparentPtrType> PtrSlice<T> {
+             while self.len > len {
+                 self.len -= 1;
+                 let p = self.ptr.as_ptr().add(self.len);
+-                ptr::drop_in_place::<T>(p as *mut T);
++                // Move ownership out, then restore the NULL terminator before
++                // invoking user destruction (which may unwind).
++                let item = ptr::read::<T>(p as *const T);
+                 ptr::write(
+                     p,
+                     Ptr::from(ptr::null_mut::<<T as GlibPtrDefault>::GlibType>()),
+                 );
++                drop(item);
+             }
+         }
+     }
+diff --git a/vendor/glib/src/log.rs b/vendor/glib/src/log.rs
+index 276d736..ee4f578 100644
+--- a/vendor/glib/src/log.rs
++++ b/vendor/glib/src/log.rs
+@@ -82,7 +82,7 @@ impl FromGlib<u32> for LogLevel {
+         } else if value & ffi::G_LOG_LEVEL_DEBUG != 0 {
+             Self::Debug
+         } else {
+-            panic!("Unknown log level: {value}")
++            panic!("Unknown log level")
+         }
+     }
+ }

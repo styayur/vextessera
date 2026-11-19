@@ -3,6 +3,17 @@ use glib::prelude::*;
 use std::hint::black_box;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ffi_conversion_contracts()?;
+    slice_ownership_contract();
+    let unknown_level = std::panic::catch_unwind(|| unsafe {
+        <glib::LogLevel as glib::translate::FromGlib<u32>>::from_glib(0x8000_0000)
+    });
+    let panic = unknown_level.expect_err("unknown native log bits must still be rejected");
+    let text = panic
+        .downcast_ref::<&str>()
+        .copied()
+        .or_else(|| panic.downcast_ref::<String>().map(String::as_str));
+    assert_eq!(text, Some("Unknown log level"));
     for _ in 0..1000 {
         let values = ["first", "", "中文", "last"];
         let variant = black_box(values.to_variant());
@@ -24,7 +35,60 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     std::io::Write::write_all(
         &mut std::io::stdout(),
-        b"Optimized VariantStrIter forward/reverse/indexed/Unicode regression passed\n",
+        b"Optimized GLib iterator, typed FFI conversion and slice ownership regression passed\n",
     )?;
     Ok(())
+}
+
+fn ffi_conversion_contracts() -> Result<(), Box<dyn std::error::Error>> {
+    assert!(glib::uuid_string_is_valid(
+        "f81d4fae-7dec-11d0-a765-00a0c91e6bf6"
+    ));
+    assert!(!glib::uuid_string_is_valid("not-a-uuid"));
+    if let Some(charset) = glib::console_charset() {
+        assert!(!charset.is_empty());
+    }
+    let path = std::path::PathBuf::from("/tmp/vextessera unicode 中文.txt");
+    let uri = glib::filename_to_uri(&path, None)?;
+    let (round_trip, hostname) = glib::filename_from_uri(&uri)?;
+    assert_eq!(round_trip, path);
+    assert!(hostname.is_none());
+    assert!(glib::filename_from_uri("not-a-file-uri").is_err());
+    assert!(glib::filename_to_uri("relative-path", None).is_err());
+    let missing = std::env::temp_dir().join(format!(
+        "vextessera-glib-regression-{}-{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)?
+            .as_nanos()
+    ));
+    assert!(!missing.exists());
+    let file = missing.join("uncreated-parent").join("test.txt");
+    assert!(glib::file_set_contents(&file, b"test").is_err());
+    assert!(glib::file_set_contents_full(
+        &file,
+        b"test",
+        glib::FileSetContentsFlags::empty(),
+        0o600
+    )
+    .is_err());
+    assert!(!missing.exists());
+    Ok(())
+}
+
+fn slice_ownership_contract() {
+    let kept = glib::Object::new::<glib::Object>();
+    let removed = glib::Object::new::<glib::Object>();
+    let removed_weak = removed.downgrade();
+    let mut slice = glib::collections::PtrSlice::from([kept.clone(), removed]);
+    assert_eq!(kept.ref_count(), 2);
+    slice.truncate(1);
+    assert_eq!(slice.len(), 1);
+    assert!(removed_weak.upgrade().is_none());
+    assert_eq!(kept.ref_count(), 2);
+    slice.truncate(0);
+    assert!(slice.is_empty());
+    assert_eq!(kept.ref_count(), 1);
+    slice.truncate(0);
+    assert_eq!(kept.ref_count(), 1);
 }

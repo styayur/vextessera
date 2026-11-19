@@ -8,8 +8,11 @@
   "archiveSha256": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
   "upstreamFix": "https://github.com/gtk-rs/gtk-rs-core/commit/b5a4071e439bef2b5eea76c3aa25e5ae84839e34",
   "modifiedUpstreamFiles": [
+    "Cargo.toml",
     "src/variant_iter.rs",
-    "Cargo.toml"
+    "src/auto/functions.rs",
+    "src/collections/ptr_slice.rs",
+    "src/log.rs"
   ],
   "payloadSha256": {
     ".cargo_vcs_info.json": "b301b45387ec3b66f1eace44a21991aaeac83e3140dab4faa0f6b9f7f0ec445b",
@@ -27,7 +30,7 @@
     "src/auto/date_time.rs": "fc05d7c90e522d5ef1cb7cef6d41de49b8357a8349c48745dff3f769b42d0fda",
     "src/auto/enums.rs": "70685084d7462df9cf4f9a1a5254b298f0de8ea587cbd7f8ff28e468c306386a",
     "src/auto/flags.rs": "c2f77a0bdeeea8af3d0a39d7afeb2b75affae58905522b5fa65922d460052d4e",
-    "src/auto/functions.rs": "e9b0cd6ddde7a2fcb157221e712d9f33f419aeae1aa3d206987ebce526152e7e",
+    "src/auto/functions.rs": "97efaf0c89d38ae7d768a1cd9d41cff95c200e42132945f967b46b901965b780",
     "src/auto/key_file.rs": "263c41a0df370671ef65dbf77f4a1311c349ebbb2a7b6d0a4a19525d57788e9d",
     "src/auto/main_context.rs": "6c8d3b897b821e73e1653aeff2ddfcffcfd7dd3805bb1d850656c1b8100cab84",
     "src/auto/main_loop.rs": "79d3273a2e8357b7d1cf2e3d53ed98e85f3260ae9780a7a559234c0d2d797b57",
@@ -49,7 +52,7 @@
     "src/closure.rs": "2008243add8ac242fad14e79626ba4fcf3eac2eed72666ae9f9936bad163714a",
     "src/collections/list.rs": "53887e634a8dc22fd79ad7d38f9e914d06a013061831f5e4bd2ba9095c668220",
     "src/collections/mod.rs": "0a6967d4d9f22bcfa6dcc35b2ce4f26ce1cc82f83111812ab0815f4b33e2c81f",
-    "src/collections/ptr_slice.rs": "6fcb10ac7d9b4ba58cdbed9dc0ad40a4f4d4f608a3572403f8a7c77fc99c2221",
+    "src/collections/ptr_slice.rs": "32e1cf7cf7bc71c7bfbb1d7a965da95a1a966814d6791d1db861d4b1d08bb605",
     "src/collections/slice.rs": "64d450ea2799db681a2d8d505bcac94c9f3a9ab0e52deb8c7ad0eada7d9b15a8",
     "src/collections/slist.rs": "15b7ae76a09001e2df9c43feed8f28e06385d6032d53010358e58eb4a693e54b",
     "src/collections/strv.rs": "e519528d5006592cf682be0ddca09a7eb2b5997115df28184b19e81881c03f03",
@@ -75,7 +78,7 @@
     "src/gstring_builder.rs": "bfb1b131433531af2efa8765853ef35bbe02dc86120a04b55e6ec97e60cc8fac",
     "src/key_file.rs": "018b398bc1bd50fd0f9925408d6898d2974c7f510d79575cb655dad7e17243de",
     "src/lib.rs": "70abc92bf0d02f3c4989034501065cdf64d70901e511f6720d8cd65fcbb662e1",
-    "src/log.rs": "d5458fa20083efdd1f46bc1464d46fcd32fb1af926f3151881f0c0ec37e330e1",
+    "src/log.rs": "fb031260080fa023fa22cbae5ba4273cd620f62c47296969267a07548224313d",
     "src/main_context.rs": "a1dc45489f318659f0c4a94d3143807270e6cce6a8d127afa25944838ce66b25",
     "src/main_context_channel.rs": "e619173fc993bb1ffa350ef692b50b3b268ed5b294208caede8271ae742d80e8",
     "src/main_context_futures.rs": "49a56a433d4f57929d7ced0d438b8dcdbe05b78d097e28d27ead09821cb802be",
@@ -133,5 +136,21 @@
     "tests/subclass_compiletest/06-no-auto-send-sync-with-non-send-sync-ffi-parent.stderr": "808ac199325749e28e4c5ea6a459463d87c375443dc73c143a8fc1032575895f",
     "tests/subclass_compiletest.rs": "06fd13974d96c0a21ce9a906010f82db1fdf1b17c192716510cc93ed2ef79547",
     "tests/value.rs": "c796ea2b30559e9c8ab6ebbb6c59c575d365a27b461c20f9ca0b1989dbe01d79"
+  },
+  "localHardening": {
+    "baseRevision": "08edddd761d24c970dbf58ddbe20e667f465a803",
+    "baseSha256": {
+      "src/auto/functions.rs": "e9b0cd6ddde7a2fcb157221e712d9f33f419aeae1aa3d206987ebce526152e7e",
+      "src/collections/ptr_slice.rs": "6fcb10ac7d9b4ba58cdbed9dc0ad40a4f4d4f608a3572403f8a7c77fc99c2221",
+      "src/log.rs": "d5458fa20083efdd1f46bc1464d46fcd32fb1af926f3151881f0c0ec37e330e1"
+    },
+    "patch": "security/glib-local-hardening.patch",
+    "patchSha256": "7f7693b1e0928d38dc65ab022df77e61564797cd014b39cc7975652f1ab3335d",
+    "changes": [
+      "Use explicit Error/GString/PathBuf/bool trait dispatch for C out-parameters instead of generic conversion routing. Ownership, optionality and null/error branches are preserved.",
+      "PtrSlice::truncate moves T out, writes the null slot, then drops the owned T, preserving allocation and establishing terminator before user destruction.",
+      "Unknown numeric log-level panic retains a constant diagnostic without foreign numeric bits."
+    ],
+    "analysis": "Initial CodeQL traces conflate incompatible generic conversion types and mark post-drop slot overwrite invalid. No query suppression, excluded source or advisory ignore is added; fresh exact-head analysis is required."
   }
 }

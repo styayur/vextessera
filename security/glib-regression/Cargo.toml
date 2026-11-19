@@ -5,6 +5,6 @@ edition = "2021"
 publish = false
 
 [dependencies]
-glib = { path = "../../vendor/glib" }
+glib = { path = "../../vendor/glib", features = ["v2_66"] }
 
 [workspace]

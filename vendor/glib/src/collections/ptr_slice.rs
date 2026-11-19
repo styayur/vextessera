@@ -895,11 +895,14 @@ impl<T: TransparentPtrType> PtrSlice<T> {
             while self.len > len {
                 self.len -= 1;
                 let p = self.ptr.as_ptr().add(self.len);
-                ptr::drop_in_place::<T>(p as *mut T);
+                // Move ownership out, then restore the NULL terminator before
+                // invoking user destruction (which may unwind).
+                let item = ptr::read::<T>(p as *const T);
                 ptr::write(
                     p,
                     Ptr::from(ptr::null_mut::<<T as GlibPtrDefault>::GlibType>()),
                 );
+                drop(item);
             }
         }
     }
