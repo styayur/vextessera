@@ -3,7 +3,7 @@ name: GLib source backport
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, 'fix/glib-*']
   workflow_dispatch:
 
 permissions:
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   optimized-regression:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,4 +33,36 @@ jobs:
         with:
           name: glib-target-reachability
           path: security/glib-*-tree.txt
+          if-no-files-found: error
+
+  full-rust-analysis:
+    name: Full Rust CodeQL
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Initialize full repository Rust analysis on push
+        uses: github/codeql-action/init@v4
+        with:
+          languages: rust
+          build-mode: none
+      - name: Analyze without publishing a competing default configuration
+        uses: github/codeql-action/analyze@v4
+        with:
+          output: codeql-glib-full
+          upload: never
+          upload-database: false
+          category: /language:rust/glib-full
+      - name: Require zero findings in the full SARIF
+        run: node scripts/codeql_results_gate.mjs codeql-glib-full
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glib-full-rust-codeql
+          path: codeql-glib-full/*.sarif
           if-no-files-found: error

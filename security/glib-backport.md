@@ -78,6 +78,24 @@ move/write/drop order. GLib documents the
 These source changes do not waive the CodeQL findings: the unchanged gate must
 analyze the new revision.
 
+## Full-analysis forwarding follow-up
+
+PR77's diff-informed Rust report had zero results, while its first full main
+report found five paths through a GString signed-pointer forwarding method that
+called the generic conversion helper again. The full/none/borrow pointer-form
+bridges now explicitly invoke their concrete GString base implementation with
+the same pointer cast. Allocation, copying and borrow behavior stay unchanged;
+the ObjectRef/Value fields and boxed derive remain intact. A native key-file
+search-directory test exercises the owned filename bridge and returned Unicode
+path/value repeatedly before removing its own fixture files.
+
+The existing zero-result SARIF gate also runs a full Rust analysis on branch
+push and main, outside pull-request diff filtering. It scans the full repository
+and stores SARIF without a competing default upload. Default four-language
+analysis remains enabled. See GitHub's
+[incremental analysis documentation](https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/scan-from-the-command-line/incremental-analysis)
+for the distinction between diff-informed PR and full non-PR analysis.
+
 RUSTSEC-2024-0429 / GHSA-wrw7-89jp-8q8g formally marks all glib <0.20 affected.
 This is a verified source backport, not a claim that upstream published a fixed
 GTK3 release. Do not dismiss the advisory, change the package version to evade
