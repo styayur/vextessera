@@ -80,7 +80,7 @@ analyze the new revision.
 
 ## Full-analysis forwarding follow-up
 
-PR77's diff-informed Rust report had zero results, while its first full main
+PR77's PR-scoped Rust report had zero results, while its first full main
 report found five paths through a GString signed-pointer forwarding method that
 called the generic conversion helper again. The full/none/borrow pointer-form
 bridges now explicitly invoke their concrete GString base implementation with
