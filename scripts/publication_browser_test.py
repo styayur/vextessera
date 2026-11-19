@@ -26,7 +26,20 @@ with sync_playwright() as p:
     page.wait_for_load_state('networkidle')
     assert page.title()=='Vextessera'
     manifest=context.request.get(base+'index/manifest.json').json()
-    assert len(manifest)==7 and sum(provider['count'] for provider in manifest)==1555
+    # Refreshes legitimately change record counts. Independently bind the served
+    # snapshot to committed metadata and bytes, rather than a historical total.
+    expected=json.loads((Path(__file__).resolve().parents[1]/'public/index/manifest.json').read_text(encoding='utf-8'))
+    providers={'mathinsight','falstad','phet','betterexplained','physicsfundamentals','physicstuff','maotian'}
+    assert len(manifest)==len(providers) and {provider['id'] for provider in manifest}==providers
+    assert manifest==expected,'Served provider metadata differs from the committed snapshot'
+    for provider in manifest:
+        assert provider['count']>0 and Path(provider['file']).name==provider['file']
+        snapshot=context.request.get(base+'index/'+provider['file']);assert snapshot.status==200
+        assert hashlib.sha256(snapshot.body()).hexdigest()==provider['content_hash']
+        index=snapshot.json()
+        assert index['source_id']==provider['id'] and index['schema_version']==2
+        assert index['updated_at']==provider['updated_at'] and len(index['entries'])==provider['count']
+    results['indexPublication']={'providers':len(manifest),'records':sum(provider['count'] for provider in manifest),'contentHashesVerified':True}
     for query in ['gradient','旋度','駐波','site:falstad wave']:
         page.locator('#search-input').fill(query);page.locator('#search-input').press('Enter')
         page.locator('[role="option"]').first.wait_for()
