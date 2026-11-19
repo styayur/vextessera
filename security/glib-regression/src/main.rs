@@ -45,6 +45,57 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn ffi_conversion_contracts() -> Result<(), Box<dyn std::error::Error>> {
+    let (_, charset) = glib::charset();
+    assert!(charset.is_some_and(|value| !value.is_empty()));
+    let (_, filename_charsets) = glib::filename_charsets();
+    assert!(!filename_charsets.is_empty());
+    assert!(filename_charsets.iter().all(|value| !value.is_empty()));
+    let (scheme, userinfo, host, port, path, query, fragment) = glib::Uri::split(
+        "https://example.org:8443/path?q=1#part",
+        glib::UriFlags::empty(),
+    )?;
+    assert_eq!(scheme.as_ref().map(|value| value.as_str()), Some("https"));
+    assert!(userinfo.is_none());
+    assert_eq!(
+        host.as_ref().map(|value| value.as_str()),
+        Some("example.org")
+    );
+    assert_eq!(port, 8443);
+    assert_eq!(path.as_str(), "/path");
+    assert_eq!(query.as_ref().map(|value| value.as_str()), Some("q=1"));
+    assert_eq!(fragment.as_ref().map(|value| value.as_str()), Some("part"));
+    let (scheme, userinfo, host, port, path, query, fragment) =
+        glib::Uri::split("relative", glib::UriFlags::empty())?;
+    assert!(scheme.is_none() && userinfo.is_none() && host.is_none());
+    assert_eq!(port, -1);
+    assert_eq!(path.as_str(), "relative");
+    assert!(query.is_none() && fragment.is_none());
+    let (_, _, password, auth, _, _, _, _, _) = glib::Uri::split_with_user(
+        "https://name:fixture;meta@example.org/path",
+        glib::UriFlags::HAS_PASSWORD | glib::UriFlags::HAS_AUTH_PARAMS,
+    )?;
+    assert!(password.as_ref().map(|value| value.as_str()) == Some("fixture"));
+    assert!(auth.as_ref().map(|value| value.as_str()) == Some("meta"));
+    let (scheme, host, port) =
+        glib::Uri::split_network("https://example.org:8443/path", glib::UriFlags::empty())?;
+    assert_eq!(scheme.as_ref().map(|value| value.as_str()), Some("https"));
+    assert_eq!(
+        host.as_ref().map(|value| value.as_str()),
+        Some("example.org")
+    );
+    assert_eq!(port, 8443);
+    let (scheme, user, password, auth, host, port, path, query, fragment) =
+        glib::Uri::split_with_user("https://name@example.org/path", glib::UriFlags::empty())?;
+    assert_eq!(scheme.as_ref().map(|value| value.as_str()), Some("https"));
+    assert_eq!(user.as_ref().map(|value| value.as_str()), Some("name"));
+    assert!(password.is_none() && auth.is_none());
+    assert_eq!(
+        host.as_ref().map(|value| value.as_str()),
+        Some("example.org")
+    );
+    assert_eq!(port, -1);
+    assert_eq!(path.as_str(), "/path");
+    assert!(query.is_none() && fragment.is_none());
     let input = "Unicode 中文".as_bytes();
     let (converted, bytes_read) = glib::convert(input, "UTF-8", "UTF-8")?;
     assert_eq!(&*converted, input);

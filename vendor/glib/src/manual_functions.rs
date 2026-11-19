@@ -215,8 +215,12 @@ pub fn spawn_async_with_pipes<
 pub fn charset() -> (bool, Option<&'static GStr>) {
     unsafe {
         let mut out_charset = ptr::null();
-        let is_utf8 = from_glib(ffi::g_get_charset(&mut out_charset));
-        let charset = from_glib_none(out_charset);
+        let is_utf8 = bool::from_glib(ffi::g_get_charset(&mut out_charset));
+        let charset = if out_charset.is_null() {
+            None
+        } else {
+            Some(GStr::from_ptr(out_charset))
+        };
         (is_utf8, charset)
     }
 }
@@ -253,7 +257,10 @@ pub fn file_open_tmp(
             &mut error,
         );
         if error.is_null() {
-            Ok((ret.into_raw_fd(), from_glib_full(name_used)))
+            Ok((
+                ret.into_raw_fd(),
+                std::path::PathBuf::from_glib_full(name_used),
+            ))
         } else {
             Err(crate::Error::from_glib_full(error))
         }

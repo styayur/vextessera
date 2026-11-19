@@ -59,7 +59,10 @@ pub fn convert(
         })
     });
     if result.is_null() {
-        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+        Err(CvtError::new(
+            unsafe { crate::Error::from_glib_full(error) },
+            bytes_read,
+        ))
     } else {
         let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
         Ok((slice, bytes_read))
@@ -94,7 +97,10 @@ pub fn convert_with_fallback(
         })
     });
     if result.is_null() {
-        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+        Err(CvtError::new(
+            unsafe { crate::Error::from_glib_full(error) },
+            bytes_read,
+        ))
     } else {
         let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
         Ok((slice, bytes_read))
@@ -150,7 +156,10 @@ impl IConv {
             )
         };
         if result.is_null() {
-            Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+            Err(CvtError::new(
+                unsafe { crate::Error::from_glib_full(error) },
+                bytes_read,
+            ))
         } else {
             let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
             Ok((slice, bytes_read))
@@ -213,8 +222,8 @@ pub fn filename_charsets() -> (bool, Vec<GString>) {
     unsafe {
         let is_utf8 = ffi::g_get_filename_charsets(&mut filename_charsets);
         (
-            from_glib(is_utf8),
-            FromGlibPtrContainer::from_glib_none(filename_charsets),
+            bool::from_glib(is_utf8),
+            <Vec<GString> as FromGlibPtrContainer<_, _>>::from_glib_none(filename_charsets),
         )
     }
 }

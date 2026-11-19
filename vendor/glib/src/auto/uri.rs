@@ -366,13 +366,33 @@ impl Uri {
             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok((
-                    from_glib_full(scheme),
-                    from_glib_full(userinfo),
-                    from_glib_full(host),
+                    if scheme.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(scheme))
+                    },
+                    if userinfo.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(userinfo))
+                    },
+                    if host.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(host))
+                    },
                     port.assume_init(),
-                    from_glib_full(path),
-                    from_glib_full(query),
-                    from_glib_full(fragment),
+                    crate::GString::from_glib_full(path),
+                    if query.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(query))
+                    },
+                    if fragment.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(fragment))
+                    },
                 ))
             } else {
                 Err(crate::Error::from_glib_full(error))
@@ -401,8 +421,16 @@ impl Uri {
             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok((
-                    from_glib_full(scheme),
-                    from_glib_full(host),
+                    if scheme.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(scheme))
+                    },
+                    if host.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(host))
+                    },
                     port.assume_init(),
                 ))
             } else {
@@ -457,15 +485,43 @@ impl Uri {
             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok((
-                    from_glib_full(scheme),
-                    from_glib_full(user),
-                    from_glib_full(password),
-                    from_glib_full(auth_params),
-                    from_glib_full(host),
+                    if scheme.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(scheme))
+                    },
+                    if user.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(user))
+                    },
+                    if password.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(password))
+                    },
+                    if auth_params.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(auth_params))
+                    },
+                    if host.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(host))
+                    },
                     port.assume_init(),
-                    from_glib_full(path),
-                    from_glib_full(query),
-                    from_glib_full(fragment),
+                    crate::GString::from_glib_full(path),
+                    if query.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(query))
+                    },
+                    if fragment.is_null() {
+                        None
+                    } else {
+                        Some(crate::GString::from_glib_full(fragment))
+                    },
                 ))
             } else {
                 Err(crate::Error::from_glib_full(error))

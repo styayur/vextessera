@@ -44,6 +44,13 @@ ten source files use the concrete Error conversion, including key-file,
 URI, markup, variant, encoding, thread-pool and manual helpers. This retains the same native calls, null/error
 branches, optional hostname handling and ownership transfers.
 
+URI split outputs use concrete NULL-to-None / owned-GString branches for each
+optional component and a concrete GString conversion for the mandatory path.
+Filename out-parameters name PathBuf, while charset results retain their
+original borrowed GStr / owned Vec<GString> lifetimes. Native URI component
+tests cover both populated and absent fields, including fixture-only user/auth
+components without network requests or value logging.
+
 `PtrSlice::truncate` now reads the owned element, writes the NULL slot and only
 then drops the owned element. The enclosing GLib allocation stays owned by the
 slice, and the terminator is established before user destruction can unwind.

@@ -283,7 +283,7 @@ index f071797..0c0c78a 100644
          }
      }
 diff --git a/vendor/glib/src/auto/uri.rs b/vendor/glib/src/auto/uri.rs
-index d1e2c37..edf867f 100644
+index d1e2c37..dbedddd 100644
 --- a/vendor/glib/src/auto/uri.rs
 +++ b/vendor/glib/src/auto/uri.rs
 @@ -96,7 +96,7 @@ impl Uri {
@@ -322,8 +322,43 @@ index d1e2c37..edf867f 100644
              }
          }
      }
-@@ -375,7 +375,7 @@ impl Uri {
-                     from_glib_full(fragment),
+@@ -366,16 +366,36 @@ impl Uri {
+             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
+             if error.is_null() {
+                 Ok((
+-                    from_glib_full(scheme),
+-                    from_glib_full(userinfo),
+-                    from_glib_full(host),
++                    if scheme.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(scheme))
++                    },
++                    if userinfo.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(userinfo))
++                    },
++                    if host.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(host))
++                    },
+                     port.assume_init(),
+-                    from_glib_full(path),
+-                    from_glib_full(query),
+-                    from_glib_full(fragment),
++                    crate::GString::from_glib_full(path),
++                    if query.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(query))
++                    },
++                    if fragment.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(fragment))
++                    },
                  ))
              } else {
 -                Err(from_glib_full(error))
@@ -331,7 +366,22 @@ index d1e2c37..edf867f 100644
              }
          }
      }
-@@ -406,7 +406,7 @@ impl Uri {
+@@ -401,12 +421,20 @@ impl Uri {
+             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
+             if error.is_null() {
+                 Ok((
+-                    from_glib_full(scheme),
+-                    from_glib_full(host),
++                    if scheme.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(scheme))
++                    },
++                    if host.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(host))
++                    },
                      port.assume_init(),
                  ))
              } else {
@@ -340,8 +390,55 @@ index d1e2c37..edf867f 100644
              }
          }
      }
-@@ -468,7 +468,7 @@ impl Uri {
-                     from_glib_full(fragment),
+@@ -457,18 +485,46 @@ impl Uri {
+             debug_assert_eq!(is_ok == crate::ffi::GFALSE, !error.is_null());
+             if error.is_null() {
+                 Ok((
+-                    from_glib_full(scheme),
+-                    from_glib_full(user),
+-                    from_glib_full(password),
+-                    from_glib_full(auth_params),
+-                    from_glib_full(host),
++                    if scheme.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(scheme))
++                    },
++                    if user.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(user))
++                    },
++                    if password.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(password))
++                    },
++                    if auth_params.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(auth_params))
++                    },
++                    if host.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(host))
++                    },
+                     port.assume_init(),
+-                    from_glib_full(path),
+-                    from_glib_full(query),
+-                    from_glib_full(fragment),
++                    crate::GString::from_glib_full(path),
++                    if query.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(query))
++                    },
++                    if fragment.is_null() {
++                        None
++                    } else {
++                        Some(crate::GString::from_glib_full(fragment))
++                    },
                  ))
              } else {
 -                Err(from_glib_full(error))
@@ -349,7 +446,7 @@ index d1e2c37..edf867f 100644
              }
          }
      }
-@@ -490,7 +490,7 @@ impl Uri {
+@@ -490,7 +546,7 @@ impl Uri {
              if error.is_null() {
                  Ok(from_glib_full(ret))
              } else {
@@ -379,37 +476,57 @@ index e925d98..f462401 100644
          }
      }
 diff --git a/vendor/glib/src/convert.rs b/vendor/glib/src/convert.rs
-index 94e769d..bccecf6 100644
+index 94e769d..fe5081e 100644
 --- a/vendor/glib/src/convert.rs
 +++ b/vendor/glib/src/convert.rs
-@@ -59,7 +59,7 @@ pub fn convert(
+@@ -59,7 +59,10 @@ pub fn convert(
          })
      });
      if result.is_null() {
 -        Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
-+        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
++        Err(CvtError::new(
++            unsafe { crate::Error::from_glib_full(error) },
++            bytes_read,
++        ))
      } else {
          let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
          Ok((slice, bytes_read))
-@@ -94,7 +94,7 @@ pub fn convert_with_fallback(
+@@ -94,7 +97,10 @@ pub fn convert_with_fallback(
          })
      });
      if result.is_null() {
 -        Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
-+        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
++        Err(CvtError::new(
++            unsafe { crate::Error::from_glib_full(error) },
++            bytes_read,
++        ))
      } else {
          let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
          Ok((slice, bytes_read))
-@@ -150,7 +150,7 @@ impl IConv {
+@@ -150,7 +156,10 @@ impl IConv {
              )
          };
          if result.is_null() {
 -            Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
-+            Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
++            Err(CvtError::new(
++                unsafe { crate::Error::from_glib_full(error) },
++                bytes_read,
++            ))
          } else {
              let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
              Ok((slice, bytes_read))
-@@ -245,7 +245,7 @@ pub fn filename_from_utf8(utf8string: impl IntoGStr) -> Result<(PathBuf, usize),
+@@ -213,8 +222,8 @@ pub fn filename_charsets() -> (bool, Vec<GString>) {
+     unsafe {
+         let is_utf8 = ffi::g_get_filename_charsets(&mut filename_charsets);
+         (
+-            from_glib(is_utf8),
+-            FromGlibPtrContainer::from_glib_none(filename_charsets),
++            bool::from_glib(is_utf8),
++            <Vec<GString> as FromGlibPtrContainer<_, _>>::from_glib_none(filename_charsets),
+         )
+     }
+ }
+@@ -245,7 +254,7 @@ pub fn filename_from_utf8(utf8string: impl IntoGStr) -> Result<(PathBuf, usize),
              )
          })
      } else {
@@ -418,7 +535,7 @@ index 94e769d..bccecf6 100644
      }
  }
  
-@@ -274,7 +274,7 @@ pub fn filename_to_utf8(
+@@ -274,7 +283,7 @@ pub fn filename_to_utf8(
              )
          })
      } else {
@@ -427,7 +544,7 @@ index 94e769d..bccecf6 100644
      }
  }
  
-@@ -303,7 +303,7 @@ pub fn locale_from_utf8(utf8string: impl IntoGStr) -> Result<(Slice<u8>, usize),
+@@ -303,7 +312,7 @@ pub fn locale_from_utf8(utf8string: impl IntoGStr) -> Result<(Slice<u8>, usize),
              )
          })
      } else {
@@ -436,7 +553,7 @@ index 94e769d..bccecf6 100644
      }
  }
  
-@@ -330,7 +330,7 @@ pub fn locale_to_utf8(opsysstring: &[u8]) -> Result<(crate::GString, usize), Cvt
+@@ -330,7 +339,7 @@ pub fn locale_to_utf8(opsysstring: &[u8]) -> Result<(crate::GString, usize), Cvt
              )
          })
      } else {
@@ -446,7 +563,7 @@ index 94e769d..bccecf6 100644
  }
  
 diff --git a/vendor/glib/src/key_file.rs b/vendor/glib/src/key_file.rs
-index 54c9eb1..fa18906 100644
+index 54c9eb1..e252c00 100644
 --- a/vendor/glib/src/key_file.rs
 +++ b/vendor/glib/src/key_file.rs
 @@ -17,7 +17,7 @@ impl KeyFile {
@@ -458,8 +575,12 @@ index 54c9eb1..fa18906 100644
              }
          }
      }
-@@ -42,7 +42,7 @@ impl KeyFile {
-                 let path: GString = from_glib_full(full_path);
+@@ -39,10 +39,10 @@ impl KeyFile {
+                 &mut error,
+             );
+             if error.is_null() {
+-                let path: GString = from_glib_full(full_path);
++                let path: GString = std::path::PathBuf::from_glib_full(full_path);
                  Ok(path::PathBuf::from(&path))
              } else {
 -                Err(from_glib_full(error))
@@ -467,8 +588,12 @@ index 54c9eb1..fa18906 100644
              }
          }
      }
-@@ -71,7 +71,7 @@ impl KeyFile {
-                 let path: GString = from_glib_full(full_path);
+@@ -68,10 +68,10 @@ impl KeyFile {
+                 &mut error,
+             );
+             if error.is_null() {
+-                let path: GString = from_glib_full(full_path);
++                let path: GString = std::path::PathBuf::from_glib_full(full_path);
                  Ok(path::PathBuf::from(&path))
              } else {
 -                Err(from_glib_full(error))
@@ -584,7 +709,7 @@ index 276d736..2855770 100644
  }
  
 diff --git a/vendor/glib/src/manual_functions.rs b/vendor/glib/src/manual_functions.rs
-index 7d81ba9..159915c 100644
+index 7d81ba9..2afd3ec 100644
 --- a/vendor/glib/src/manual_functions.rs
 +++ b/vendor/glib/src/manual_functions.rs
 @@ -66,7 +66,7 @@ pub fn spawn_async_with_fds<P: AsRef<std::path::Path>, T: AsRawFd, U: AsRawFd, V
@@ -614,7 +739,22 @@ index 7d81ba9..159915c 100644
          }
      }
  }
-@@ -234,7 +234,7 @@ pub fn unix_open_pipe(flags: i32) -> Result<(RawFd, RawFd), Error> {
+@@ -215,8 +215,12 @@ pub fn spawn_async_with_pipes<
+ pub fn charset() -> (bool, Option<&'static GStr>) {
+     unsafe {
+         let mut out_charset = ptr::null();
+-        let is_utf8 = from_glib(ffi::g_get_charset(&mut out_charset));
+-        let charset = from_glib_none(out_charset);
++        let is_utf8 = bool::from_glib(ffi::g_get_charset(&mut out_charset));
++        let charset = if out_charset.is_null() {
++            None
++        } else {
++            Some(GStr::from_ptr(out_charset))
++        };
+         (is_utf8, charset)
+     }
+ }
+@@ -234,7 +238,7 @@ pub fn unix_open_pipe(flags: i32) -> Result<(RawFd, RawFd), Error> {
                  FromRawFd::from_raw_fd(fds[1]),
              ))
          } else {
@@ -623,9 +763,15 @@ index 7d81ba9..159915c 100644
          }
      }
  }
-@@ -255,7 +255,7 @@ pub fn file_open_tmp(
+@@ -253,9 +257,12 @@ pub fn file_open_tmp(
+             &mut error,
+         );
          if error.is_null() {
-             Ok((ret.into_raw_fd(), from_glib_full(name_used)))
+-            Ok((ret.into_raw_fd(), from_glib_full(name_used)))
++            Ok((
++                ret.into_raw_fd(),
++                std::path::PathBuf::from_glib_full(name_used),
++            ))
          } else {
 -            Err(from_glib_full(error))
 +            Err(crate::Error::from_glib_full(error))

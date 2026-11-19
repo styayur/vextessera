@@ -39,7 +39,7 @@ impl KeyFile {
                 &mut error,
             );
             if error.is_null() {
-                let path: GString = from_glib_full(full_path);
+                let path: GString = std::path::PathBuf::from_glib_full(full_path);
                 Ok(path::PathBuf::from(&path))
             } else {
                 Err(crate::Error::from_glib_full(error))
@@ -68,7 +68,7 @@ impl KeyFile {
                 &mut error,
             );
             if error.is_null() {
-                let path: GString = from_glib_full(full_path);
+                let path: GString = std::path::PathBuf::from_glib_full(full_path);
                 Ok(path::PathBuf::from(&path))
             } else {
                 Err(crate::Error::from_glib_full(error))
