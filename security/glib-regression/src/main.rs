@@ -4,6 +4,7 @@ use std::hint::black_box;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     ffi_conversion_contracts()?;
+    key_file_path_contract()?;
     slice_ownership_contract();
     assert!(glib::LogLevel::try_from(0x8000_0000).is_err());
     assert!(glib::LogLevel::try_from(0).is_err());
@@ -176,4 +177,32 @@ fn slice_ownership_contract() {
     assert_eq!(kept.ref_count(), 1);
     slice.truncate(0);
     assert_eq!(kept.ref_count(), 1);
+}
+
+fn key_file_path_contract() -> Result<(), Box<dyn std::error::Error>> {
+    let directory = std::env::temp_dir().join(format!(
+        "vextessera-glib-key-file-{}-{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)?
+            .as_nanos()
+    ));
+    assert!(!directory.exists());
+    std::fs::create_dir(&directory)?;
+    let name = "fixture-中文.ini";
+    let file = directory.join(name);
+    std::fs::write(&file, "[group]\nname=路径\n")?;
+    let key_file = glib::KeyFile::new();
+    for _ in 0..100 {
+        let full_path =
+            key_file.load_from_dirs(name, &[&directory], glib::KeyFileFlags::empty())?;
+        assert_eq!(full_path, file);
+        assert_eq!(key_file.string("group", "name")?.as_str(), "路径");
+    }
+    assert!(key_file
+        .load_from_dirs("absent.ini", &[&directory], glib::KeyFileFlags::empty())
+        .is_err());
+    std::fs::remove_file(&file)?;
+    std::fs::remove_dir(&directory)?;
+    Ok(())
 }

@@ -3,7 +3,7 @@ name: GLib source backport
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, 'fix/glib-*']
   workflow_dispatch:
 
 permissions:
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   optimized-regression:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,4 +33,61 @@ jobs:
         with:
           name: glib-target-reachability
           path: security/glib-*-tree.txt
+          if-no-files-found: error
+
+  full-rust-analysis:
+    name: Full Rust CodeQL
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Initialize full repository Rust analysis on push
+        uses: github/codeql-action/init@v4
+        with:
+          languages: rust
+          build-mode: none
+          db-location: ${{ runner.temp }}/codeql-glib-full-db
+      - name: Analyze without publishing a competing default configuration
+        uses: github/codeql-action/analyze@v4
+        with:
+          output: codeql-glib-full
+          upload: never
+          upload-database: false
+          category: /language:rust/glib-full
+      - name: Verify source coverage includes the string bridge and all affected fields
+        env:
+          GLIB_CODEQL_DATABASE: ${{ runner.temp }}/codeql-glib-full-db
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, zipfile
+          archives = list(pathlib.Path(os.environ['GLIB_CODEQL_DATABASE']).rglob('src.zip'))
+          assert len(archives) == 1, 'Expected one Rust source archive'
+          required = ['vendor/glib/src/gstring.rs', 'vendor/glib/src/object.rs',
+                      'vendor/glib/src/value.rs', 'vendor/glib/src/subclass/boxed.rs']
+          coverage = []
+          with zipfile.ZipFile(archives[0]) as archive:
+              for path in required:
+                  entries = [name for name in archive.namelist() if name.endswith(path)]
+                  assert len(entries) == 1, path
+                  source = pathlib.Path(path).read_bytes()
+                  assert archive.getinfo(entries[0]).file_size == len(source), path
+                  assert archive.read(entries[0]) == source, path
+                  coverage.append({'path': path, 'sha256': hashlib.sha256(source).hexdigest()})
+          pathlib.Path('codeql-glib-full/source-coverage.json').write_text(json.dumps(coverage, indent=2))
+          print('Full Rust source archive matches the bridge and all affected field source bytes')
+          PY
+      - name: Require zero findings in the full SARIF
+        run: node scripts/codeql_results_gate.mjs codeql-glib-full
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: glib-full-rust-codeql
+          path: |
+            codeql-glib-full/*.sarif
+            codeql-glib-full/source-coverage.json
           if-no-files-found: error

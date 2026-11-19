@@ -16,6 +16,7 @@
     "src/auto/uri.rs",
     "src/collections/ptr_slice.rs",
     "src/convert.rs",
+    "src/gstring.rs",
     "src/key_file.rs",
     "src/log.rs",
     "src/manual_functions.rs",
@@ -83,7 +84,7 @@
     "src/gobject/flags.rs": "6c2bb2afff339f54225ebbe9d4ab7ef06e8f783612e1e079bc18a3be6ef0ba1d",
     "src/gobject/mod.rs": "ad5a8530e2bb7e3a4e49d9d78f66451b0aa8c5b16b88e7185c4a8759d5aa3329",
     "src/gobject/signal_group.rs": "17eb4995d8f13d37d25d3a0465ca135d69fc4e548db712c2bd80c5419d8812e6",
-    "src/gstring.rs": "f3fe8d70bd1e58b070d4ed9d34cdd3e39f511f341424a632b9d8acdf2aec8741",
+    "src/gstring.rs": "47df3d094ffef74c2534d0eb9d32037811e4ea3f8c6bea9c229ba00d312bb755",
     "src/gstring_builder.rs": "bfb1b131433531af2efa8765853ef35bbe02dc86120a04b55e6ec97e60cc8fac",
     "src/key_file.rs": "2ad8fa5132d6093e623ee4def8e1d68aef46372c3c4c9f9811419b44f3593e2a",
     "src/lib.rs": "70abc92bf0d02f3c4989034501065cdf64d70901e511f6720d8cd65fcbb662e1",
@@ -155,6 +156,7 @@
       "src/auto/uri.rs": "dd30e5981df044c95a3900c983da28c06fd8fa399b03c76acb45ec2f6c59fcae",
       "src/collections/ptr_slice.rs": "6fcb10ac7d9b4ba58cdbed9dc0ad40a4f4d4f608a3572403f8a7c77fc99c2221",
       "src/convert.rs": "78fb8fa4fcc6d4c42be9eacb782f456daa35fdab20698dbcc1b67c11e66cb05a",
+      "src/gstring.rs": "f3fe8d70bd1e58b070d4ed9d34cdd3e39f511f341424a632b9d8acdf2aec8741",
       "src/key_file.rs": "018b398bc1bd50fd0f9925408d6898d2974c7f510d79575cb655dad7e17243de",
       "src/log.rs": "d5458fa20083efdd1f46bc1464d46fcd32fb1af926f3151881f0c0ec37e330e1",
       "src/manual_functions.rs": "8e9bea0686535b5a464c82fe8b0356734e82c6aafe8bec9c717d208a6fb76059",
@@ -163,11 +165,12 @@
       "src/variant.rs": "b48295eca732e862b2c5347ee431c2f800c7b0c6b30f6a0f0879cd16fe13eb9b"
     },
     "patch": "security/glib-local-hardening.patch",
-    "patchSha256": "64bb40fd9608b49d541836f024319a788b0f0bf265292d339be29528432ac105",
+    "patchSha256": "a15e6676240adbb62f93cb0e00694051548ec9239928aeb070cef126dac82c6b",
     "changes": [
       "All 64 matching GError conversions use concrete Error dispatch. URI gchar outputs explicitly retain NULL/None vs owned GString branches; filename/charset outputs name PathBuf/GStr/Vec<GString>/bool targets. Native calls, optionality, lifetime, allocator ownership, error branches and offsets are retained.",
       "PtrSlice::truncate moves T out, writes the null slot, then drops the owned T, preserving allocation and establishing terminator before user destruction.",
-      "Unknown numeric log-level panic retains a constant diagnostic; additive safe TryFrom<u32> validates the same flags and the existing native conversion delegates to it."
+      "Unknown numeric log-level panic retains a constant diagnostic; additive safe TryFrom<u32> validates the same flags and the existing native conversion delegates to it.",
+      "GString full/none/borrow signed and const pointer bridges explicitly preserve the concrete GString target instead of reentering generic conversion helpers; identical casts and allocator/copy/borrow implementations."
     ],
     "analysis": "Initial CodeQL traces conflate incompatible generic conversion types and mark post-drop slot overwrite invalid. No query suppression, excluded source or advisory ignore is added; fresh exact-head analysis is required."
   }
