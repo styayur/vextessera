@@ -66,7 +66,7 @@ pub fn spawn_async_with_fds<P: AsRef<std::path::Path>, T: AsRawFd, U: AsRawFd, V
         if error.is_null() {
             Ok(child_pid)
         } else {
-            Err(from_glib_full(error))
+            Err(crate::Error::from_glib_full(error))
         }
     }
 }
@@ -123,7 +123,7 @@ pub fn spawn_async_with_fds<P: AsRef<std::path::Path>, T: AsRawFd, U: AsRawFd, V
 //         if error.is_null() {
 //             Ok(child_pid)
 //         } else {
-//             Err(from_glib_full(error))
+//             Err(crate::Error::from_glib_full(error))
 //         }
 //     }
 // }
@@ -200,7 +200,7 @@ pub fn spawn_async_with_pipes<
         //     ))
         // }
         } else {
-            Err(from_glib_full(error))
+            Err(crate::Error::from_glib_full(error))
         }
     }
 }
@@ -234,7 +234,7 @@ pub fn unix_open_pipe(flags: i32) -> Result<(RawFd, RawFd), Error> {
                 FromRawFd::from_raw_fd(fds[1]),
             ))
         } else {
-            Err(from_glib_full(error))
+            Err(crate::Error::from_glib_full(error))
         }
     }
 }
@@ -255,7 +255,7 @@ pub fn file_open_tmp(
         if error.is_null() {
             Ok((ret.into_raw_fd(), from_glib_full(name_used)))
         } else {
-            Err(from_glib_full(error))
+            Err(crate::Error::from_glib_full(error))
         }
     }
 }

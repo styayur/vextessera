@@ -121,6 +121,243 @@ index 7d569ad..8e2d296 100644
  }
  
  #[doc(alias = "g_uuid_string_random")]
+diff --git a/vendor/glib/src/auto/key_file.rs b/vendor/glib/src/auto/key_file.rs
+index 8c7986e..b2170b2 100644
+--- a/vendor/glib/src/auto/key_file.rs
++++ b/vendor/glib/src/auto/key_file.rs
+@@ -40,7 +40,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -59,7 +59,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(ret)
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -83,7 +83,7 @@ impl KeyFile {
+                     length.assume_init() as _,
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -102,7 +102,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(ret)
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -121,7 +121,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(ret)
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -145,7 +145,7 @@ impl KeyFile {
+                     length.assume_init() as _,
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -188,7 +188,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(ret)
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -207,7 +207,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -236,7 +236,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -257,7 +257,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -280,7 +280,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -303,7 +303,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -321,7 +321,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -340,7 +340,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -382,7 +382,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+diff --git a/vendor/glib/src/auto/markup_parse_context.rs b/vendor/glib/src/auto/markup_parse_context.rs
+index f071797..0c0c78a 100644
+--- a/vendor/glib/src/auto/markup_parse_context.rs
++++ b/vendor/glib/src/auto/markup_parse_context.rs
+@@ -31,7 +31,7 @@ impl MarkupParseContext {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -82,7 +82,7 @@ impl MarkupParseContext {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+diff --git a/vendor/glib/src/auto/uri.rs b/vendor/glib/src/auto/uri.rs
+index d1e2c37..edf867f 100644
+--- a/vendor/glib/src/auto/uri.rs
++++ b/vendor/glib/src/auto/uri.rs
+@@ -96,7 +96,7 @@ impl Uri {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -208,7 +208,7 @@ impl Uri {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -284,7 +284,7 @@ impl Uri {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -321,7 +321,7 @@ impl Uri {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -375,7 +375,7 @@ impl Uri {
+                     from_glib_full(fragment),
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -406,7 +406,7 @@ impl Uri {
+                     port.assume_init(),
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -468,7 +468,7 @@ impl Uri {
+                     from_glib_full(fragment),
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -490,7 +490,7 @@ impl Uri {
+             if error.is_null() {
+                 Ok(from_glib_full(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
 diff --git a/vendor/glib/src/collections/ptr_slice.rs b/vendor/glib/src/collections/ptr_slice.rs
 index e925d98..f462401 100644
 --- a/vendor/glib/src/collections/ptr_slice.rs
@@ -141,6 +378,176 @@ index e925d98..f462401 100644
              }
          }
      }
+diff --git a/vendor/glib/src/convert.rs b/vendor/glib/src/convert.rs
+index 94e769d..bccecf6 100644
+--- a/vendor/glib/src/convert.rs
++++ b/vendor/glib/src/convert.rs
+@@ -59,7 +59,7 @@ pub fn convert(
+         })
+     });
+     if result.is_null() {
+-        Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
++        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+     } else {
+         let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
+         Ok((slice, bytes_read))
+@@ -94,7 +94,7 @@ pub fn convert_with_fallback(
+         })
+     });
+     if result.is_null() {
+-        Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
++        Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+     } else {
+         let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
+         Ok((slice, bytes_read))
+@@ -150,7 +150,7 @@ impl IConv {
+             )
+         };
+         if result.is_null() {
+-            Err(CvtError::new(unsafe { from_glib_full(error) }, bytes_read))
++            Err(CvtError::new(unsafe { crate::Error::from_glib_full(error) }, bytes_read))
+         } else {
+             let slice = unsafe { Slice::from_glib_full_num(result, bytes_written as _) };
+             Ok((slice, bytes_read))
+@@ -245,7 +245,7 @@ pub fn filename_from_utf8(utf8string: impl IntoGStr) -> Result<(PathBuf, usize),
+             )
+         })
+     } else {
+-        Err(unsafe { CvtError::new(from_glib_full(error), bytes_read) })
++        Err(unsafe { CvtError::new(crate::Error::from_glib_full(error), bytes_read) })
+     }
+ }
+ 
+@@ -274,7 +274,7 @@ pub fn filename_to_utf8(
+             )
+         })
+     } else {
+-        Err(unsafe { CvtError::new(from_glib_full(error), bytes_read) })
++        Err(unsafe { CvtError::new(crate::Error::from_glib_full(error), bytes_read) })
+     }
+ }
+ 
+@@ -303,7 +303,7 @@ pub fn locale_from_utf8(utf8string: impl IntoGStr) -> Result<(Slice<u8>, usize),
+             )
+         })
+     } else {
+-        Err(unsafe { CvtError::new(from_glib_full(error), bytes_read) })
++        Err(unsafe { CvtError::new(crate::Error::from_glib_full(error), bytes_read) })
+     }
+ }
+ 
+@@ -330,7 +330,7 @@ pub fn locale_to_utf8(opsysstring: &[u8]) -> Result<(crate::GString, usize), Cvt
+             )
+         })
+     } else {
+-        Err(unsafe { CvtError::new(from_glib_full(error), bytes_read) })
++        Err(unsafe { CvtError::new(crate::Error::from_glib_full(error), bytes_read) })
+     }
+ }
+ 
+diff --git a/vendor/glib/src/key_file.rs b/vendor/glib/src/key_file.rs
+index 54c9eb1..fa18906 100644
+--- a/vendor/glib/src/key_file.rs
++++ b/vendor/glib/src/key_file.rs
+@@ -17,7 +17,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -42,7 +42,7 @@ impl KeyFile {
+                 let path: GString = from_glib_full(full_path);
+                 Ok(path::PathBuf::from(&path))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -71,7 +71,7 @@ impl KeyFile {
+                 let path: GString = from_glib_full(full_path);
+                 Ok(path::PathBuf::from(&path))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -113,7 +113,7 @@ impl KeyFile {
+                     length.assume_init() as _,
+                 ))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -132,7 +132,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(from_glib(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -150,7 +150,7 @@ impl KeyFile {
+             if error.is_null() {
+                 Ok(from_glib(ret))
+             } else {
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -169,7 +169,7 @@ impl KeyFile {
+                 &mut error,
+             );
+             if !error.is_null() {
+-                return Err(from_glib_full(error));
++                return Err(crate::Error::from_glib_full(error));
+             }
+             Ok(FromGlibContainer::from_glib_container_num(
+                 ret,
+@@ -193,7 +193,7 @@ impl KeyFile {
+                 Ok(from_glib_full(ret))
+             } else {
+                 ffi::g_free(ret as *mut _);
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -218,7 +218,7 @@ impl KeyFile {
+                 ))
+             } else {
+                 ffi::g_strfreev(ret);
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -244,7 +244,7 @@ impl KeyFile {
+                 Ok(from_glib_full(ret))
+             } else {
+                 ffi::g_free(ret as *mut _);
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
+@@ -275,7 +275,7 @@ impl KeyFile {
+                 ))
+             } else {
+                 ffi::g_strfreev(ret);
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             }
+         }
+     }
 diff --git a/vendor/glib/src/log.rs b/vendor/glib/src/log.rs
 index 276d736..ee4f578 100644
 --- a/vendor/glib/src/log.rs
@@ -154,3 +561,118 @@ index 276d736..ee4f578 100644
          }
      }
  }
+diff --git a/vendor/glib/src/manual_functions.rs b/vendor/glib/src/manual_functions.rs
+index 7d81ba9..159915c 100644
+--- a/vendor/glib/src/manual_functions.rs
++++ b/vendor/glib/src/manual_functions.rs
+@@ -66,7 +66,7 @@ pub fn spawn_async_with_fds<P: AsRef<std::path::Path>, T: AsRawFd, U: AsRawFd, V
+         if error.is_null() {
+             Ok(child_pid)
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -123,7 +123,7 @@ pub fn spawn_async_with_fds<P: AsRef<std::path::Path>, T: AsRawFd, U: AsRawFd, V
+ //         if error.is_null() {
+ //             Ok(child_pid)
+ //         } else {
+-//             Err(from_glib_full(error))
++//             Err(crate::Error::from_glib_full(error))
+ //         }
+ //     }
+ // }
+@@ -200,7 +200,7 @@ pub fn spawn_async_with_pipes<
+         //     ))
+         // }
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -234,7 +234,7 @@ pub fn unix_open_pipe(flags: i32) -> Result<(RawFd, RawFd), Error> {
+                 FromRawFd::from_raw_fd(fds[1]),
+             ))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+@@ -255,7 +255,7 @@ pub fn file_open_tmp(
+         if error.is_null() {
+             Ok((ret.into_raw_fd(), from_glib_full(name_used)))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+diff --git a/vendor/glib/src/thread_pool.rs b/vendor/glib/src/thread_pool.rs
+index c309708..80df414 100644
+--- a/vendor/glib/src/thread_pool.rs
++++ b/vendor/glib/src/thread_pool.rs
+@@ -50,7 +50,7 @@ impl ThreadPool {
+                 &mut err,
+             );
+             if pool.is_null() {
+-                Err(from_glib_full(err))
++                Err(crate::Error::from_glib_full(err))
+             } else {
+                 Ok(ThreadPool(ptr::NonNull::new_unchecked(pool)))
+             }
+@@ -69,7 +69,7 @@ impl ThreadPool {
+                 &mut err,
+             );
+             if pool.is_null() {
+-                Err(from_glib_full(err))
++                Err(crate::Error::from_glib_full(err))
+             } else {
+                 Ok(ThreadPool(ptr::NonNull::new_unchecked(pool)))
+             }
+@@ -99,7 +99,7 @@ impl ThreadPool {
+                 Ok(ThreadHandle { rx })
+             } else {
+                 let _ = Box::from_raw(func);
+-                Err(from_glib_full(err))
++                Err(crate::Error::from_glib_full(err))
+             }
+         }
+     }
+@@ -130,7 +130,7 @@ impl ThreadPool {
+             if ret {
+                 Ok(())
+             } else {
+-                Err(from_glib_full(err))
++                Err(crate::Error::from_glib_full(err))
+             }
+         }
+     }
+diff --git a/vendor/glib/src/utils.rs b/vendor/glib/src/utils.rs
+index 59e46be..ded90c4 100644
+--- a/vendor/glib/src/utils.rs
++++ b/vendor/glib/src/utils.rs
+@@ -119,7 +119,7 @@ pub fn file_get_contents(
+                 length.assume_init() as _,
+             ))
+         } else {
+-            Err(from_glib_full(error))
++            Err(crate::Error::from_glib_full(error))
+         }
+     }
+ }
+diff --git a/vendor/glib/src/variant.rs b/vendor/glib/src/variant.rs
+index 7793e80..fbc137a 100644
+--- a/vendor/glib/src/variant.rs
++++ b/vendor/glib/src/variant.rs
+@@ -588,7 +588,7 @@ impl Variant {
+             );
+             if variant.is_null() {
+                 debug_assert!(!error.is_null());
+-                Err(from_glib_full(error))
++                Err(crate::Error::from_glib_full(error))
+             } else {
+                 debug_assert!(error.is_null());
+                 Ok(from_glib_full(variant))

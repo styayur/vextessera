@@ -5,8 +5,10 @@ use std::hint::black_box;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     ffi_conversion_contracts()?;
     slice_ownership_contract();
-    let unknown_level = std::panic::catch_unwind(|| unsafe {
-        <glib::LogLevel as glib::translate::FromGlib<u32>>::from_glib(0x8000_0000)
+    let unknown_level = std::panic::catch_unwind(|| {
+        // SAFETY: This concrete conversion checks u32 flags and rejects unknown
+        // bits by a Rust panic; it performs no FFI or pointer access.
+        unsafe { <glib::LogLevel as glib::translate::FromGlib<u32>>::from_glib(0x8000_0000) }
     });
     let panic = unknown_level.expect_err("unknown native log bits must still be rejected");
     let text = panic
@@ -41,6 +43,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn ffi_conversion_contracts() -> Result<(), Box<dyn std::error::Error>> {
+    let input = "Unicode 中文".as_bytes();
+    let (converted, bytes_read) = glib::convert(input, "UTF-8", "UTF-8")?;
+    assert_eq!(&*converted, input);
+    assert_eq!(bytes_read, input.len());
+    assert!(matches!(
+        glib::convert(&[0xff], "UTF-8", "UTF-8"),
+        Err(glib::CvtError::IllegalSequence { offset: 0, .. })
+    ));
+    let key_file = glib::KeyFile::new();
+    assert!(key_file
+        .load_from_data("invalid data", glib::KeyFileFlags::empty())
+        .is_err());
+    key_file.load_from_data(
+        "[group]\nname=中文\nnumber=42\n",
+        glib::KeyFileFlags::empty(),
+    )?;
+    assert_eq!(key_file.string("group", "name")?.as_str(), "中文");
+    assert_eq!(key_file.integer("group", "number")?, 42);
+    assert!(key_file.string("group", "missing").is_err());
+    assert!(key_file.integer("group", "name").is_err());
+    assert!(glib::shell_parse_argv("'unterminated").is_err());
+    assert!(glib::Uri::parse("not a URI", glib::UriFlags::empty()).is_err());
+    assert!(glib::Uri::parse("https://example.org/path", glib::UriFlags::empty()).is_ok());
+    assert!(glib::Variant::parse(None, "not a variant").is_err());
+    assert_eq!(
+        glib::Variant::parse(None, "'中文'")?
+            .get::<String>()
+            .as_deref(),
+        Some("中文")
+    );
     assert!(glib::uuid_string_is_valid(
         "f81d4fae-7dec-11d0-a765-00a0c91e6bf6"
     ));

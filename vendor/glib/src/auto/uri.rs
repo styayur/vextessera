@@ -96,7 +96,7 @@ impl Uri {
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -208,7 +208,7 @@ impl Uri {
             if error.is_null() {
                 Ok(())
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -284,7 +284,7 @@ impl Uri {
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -321,7 +321,7 @@ impl Uri {
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -375,7 +375,7 @@ impl Uri {
                     from_glib_full(fragment),
                 ))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -406,7 +406,7 @@ impl Uri {
                     port.assume_init(),
                 ))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -468,7 +468,7 @@ impl Uri {
                     from_glib_full(fragment),
                 ))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }
@@ -490,7 +490,7 @@ impl Uri {
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
-                Err(from_glib_full(error))
+                Err(crate::Error::from_glib_full(error))
             }
         }
     }

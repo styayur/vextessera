@@ -39,7 +39,9 @@ The initial exact backport exposed seven CodeQL findings in the newly vendored
 source. Its traces connect charset/GError/boolean outputs through generic
 conversion helpers to incompatible GObject/GValue/boxed/log-level types. The
 local delta names `Error`, `GString`, `PathBuf` and `bool` conversion targets
-explicitly at those C boundaries; it retains the same native calls, null/error
+explicitly at those C boundaries. All 64 matching GError conversion sites across
+ten source files use the concrete Error conversion, including key-file,
+URI, markup, variant, encoding, thread-pool and manual helpers. This retains the same native calls, null/error
 branches, optional hostname handling and ownership transfers.
 
 `PtrSlice::truncate` now reads the owned element, writes the NULL slot and only
@@ -52,7 +54,10 @@ foreign numeric bits. No unsafe field, test or scan scope is removed.
 record distinguish these changes from upstream. The Linux harness also checks
 UUID validation, console charset, Unicode filename URI round trips, native
 GError paths and object destruction/refcounts during slice truncation. These
-tests supplement the original 1000-iteration optimized iterator regression;
+tests also cover key-file/parser errors and valid Unicode values. Enabling
+`v2_78` in the standalone Linux harness type-checks the full version-gated
+binding surface on that runner; the application's feature graph is unchanged.
+These tests supplement the original 1000-iteration optimized iterator regression;
 fresh native/security results are required for each source revision.
 
 Rust's [read ownership](https://doc.rust-lang.org/std/ptr/fn.read.html) and
