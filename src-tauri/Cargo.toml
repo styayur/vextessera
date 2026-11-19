@@ -48,3 +48,7 @@ codegen-units = 1
 lto = true
 opt-level = "s"
 strip = true
+
+# GTK3-compatible upstream source fix; API and version remain 0.18.5.
+[patch.crates-io]
+glib = { path = "../vendor/glib" }

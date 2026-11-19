@@ -6,6 +6,15 @@ in `LICENSE`, and the corresponding source is available in this repository/tag.
 
 ## Distributed frontend and native application
 
+- The Linux GTK3 dependency GLib 0.18.5 uses a local **MIT** source backport;
+  upstream `LICENSE` and `COPYRIGHT` are retained in `vendor/glib` and the notice
+  copy in `licenses/supplemental/glib-0.18.5-MIT.txt`. The public API/version stay
+  0.18.5; GNOME native library licenses remain separate. Exact source identities,
+  target reachability and advisory status are in `security/glib-backport.md` and
+  `security/glib-provenance.json`. The imported verification/regression helpers
+  are Apache-2.0, with their original full terms in
+  `licenses/supplemental/glib-backport-tools-APACHE-2.0.txt`.
+
 - React, CodeMirror 6, @uiw/react-codemirror, Zustand, Lucide and fflate: MIT
   (individual package notices are included in `licenses/`).
 - JSXGraph 1.14.1: LGPL-3.0-or-later OR MIT; this application uses the MIT option.

@@ -1,2 +1,8 @@
 # Keep embedded runtime source and its recorded hashes reproducible across checkouts.
 src-tauri/runtime/** text eol=lf
+
+# Vendored upstream identity and standalone regression must survive Windows checkout.
+vendor/glib/** text eol=lf
+security/glib-* text eol=lf
+security/glib-regression/** text eol=lf
+security/verify_glib_backport.py text eol=lf

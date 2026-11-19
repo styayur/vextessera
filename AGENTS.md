@@ -48,4 +48,4 @@ Platform-specific, real-device, signing, paid-provider and Windows-native tests 
 
 - Do not force-push, bypass rulesets, overwrite existing releases/tags/signatures or delete audit evidence.
 - Major dependency and public-contract changes require compatibility evidence and an explicit maintainer decision.
-- Use the portfolio evidence gate for PR risk classification and exact-head verification.
+- Verify the exact PR head through current native CI and GitHub rulesets. The portfolio Evidence Gate and R3/R4 approval rules are retired; do not restore them.
