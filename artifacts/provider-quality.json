@@ -13,7 +13,7 @@
     },
     "baseline": "artifacts/index-before",
     "previous_count": 903,
-    "updated_at": "2026-11-18"
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "falstad",
@@ -29,23 +29,23 @@
     },
     "baseline": "artifacts/index-before",
     "previous_count": 85,
-    "updated_at": "2026-11-18"
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "phet",
-    "entry_count": 127,
+    "entry_count": 128,
     "description_coverage": 1,
     "tags_coverage": 1,
-    "semantic_concept_coverage": 0.6456692913385826,
-    "subject_coverage": 0.6456692913385826,
+    "semantic_concept_coverage": 0.6484375,
+    "subject_coverage": 0.6484375,
     "language_coverage": 1,
     "thumbnail_coverage": 1,
     "description_sources": {
-      "unspecified": 127
+      "unspecified": 128
     },
     "baseline": "artifacts/index-before",
-    "previous_count": 122,
-    "updated_at": "2026-11-18"
+    "previous_count": 127,
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "betterexplained",
@@ -61,23 +61,23 @@
     },
     "baseline": "artifacts/index-before",
     "previous_count": 144,
-    "updated_at": "2026-11-18"
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "physicsfundamentals",
-    "entry_count": 170,
+    "entry_count": 171,
     "description_coverage": 1,
     "tags_coverage": 1,
-    "semantic_concept_coverage": 0.8941176470588236,
-    "subject_coverage": 0.8941176470588236,
+    "semantic_concept_coverage": 0.9181286549707602,
+    "subject_coverage": 0.9181286549707602,
     "language_coverage": 1,
     "thumbnail_coverage": 0,
     "description_sources": {
-      "unspecified": 170
+      "unspecified": 171
     },
     "baseline": "artifacts/index-before",
-    "previous_count": 152,
-    "updated_at": "2026-11-18"
+    "previous_count": 170,
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "physicstuff",
@@ -93,7 +93,7 @@
     },
     "baseline": "artifacts/index-before",
     "previous_count": 56,
-    "updated_at": "2026-11-18"
+    "updated_at": "2026-11-23"
   },
   {
     "provider": "maotian",
@@ -109,6 +109,6 @@
     },
     "baseline": "artifacts/index-before",
     "previous_count": 93,
-    "updated_at": "2026-11-18"
+    "updated_at": "2026-11-23"
   }
 ]
