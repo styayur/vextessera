@@ -634,7 +634,12 @@
       "简谐振动",
       "簡諧振動"
     ],
-    "aliases": [],
+    "aliases": [
+      {
+        "text": "SHM",
+        "match": "token"
+      }
+    ],
     "related": [],
     "prerequisites": [
       "differential-equation"

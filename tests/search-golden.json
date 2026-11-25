@@ -989,6 +989,24 @@
       "groups": 1
     },
     {
+      "query": "SHM",
+      "concept_ids": [
+        "simple-harmonic-motion"
+      ],
+      "groups": 1,
+      "variants": [
+        {
+          "text": "shm",
+          "match": "token"
+        }
+      ]
+    },
+    {
+      "query": "shmtool",
+      "concept_ids": [],
+      "groups": 1
+    },
+    {
       "query": "simple harmonic motion",
       "concept_ids": [
         "simple-harmonic-motion"
